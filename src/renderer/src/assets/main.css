@@ -120,5 +120,5 @@ html, body {
   color: var(--on-content-panel-background);
   background: var(--content-panel-background);
   border: 0 solid var(--on-content-panel-background);
-  border-radius: 8px 0 0 0;
+  border-radius: 18px 0 0 0;
 }
