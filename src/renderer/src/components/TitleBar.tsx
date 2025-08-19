@@ -1,6 +1,6 @@
-import {JSX} from "react"
-import {getAppVersionString} from "./Versions"
-import {WindowCommandType} from "../../../shared/WindowCommandType"
+import { JSX } from "react"
+import { getAppVersionString } from "./Versions"
+import { WindowCommandType } from "../../../shared/WindowCommandType"
 import "mdui/dist/css/mdui.min.css"
 import "mdui/dist/js/mdui.min.js"
 

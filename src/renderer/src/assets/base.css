@@ -2,6 +2,8 @@
   --background: #eceff4;
   --on-background: #4c566a;
   --subtitle: #999999;
+  --content-panel-background: #ffffff;
+  --on-content-panel-background: #212121;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -9,5 +11,7 @@
     --background: #2e3440;
     --on-background: #d8dee9;
     --subtitle: #dddddd;
+    --content-panel-background: #212121;
+    --on-content-panel-background: #ffffff;
   }
 }

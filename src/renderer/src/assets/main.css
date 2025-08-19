@@ -99,3 +99,26 @@ html, body {
   font-size: 14px;
   font-weight: 400;
 }
+
+.main-panel-container {
+  color: var(--on-background);
+  background: var(--background);
+  width: 100vw;
+  height: calc(100vh - 48px - 64px);
+}
+
+.side-panel {
+  color: var(--on-background);
+  background: var(--background);
+}
+
+.side-panel-content {
+  padding: 16px;
+}
+
+.content-panel {
+  color: var(--on-content-panel-background);
+  background: var(--content-panel-background);
+  border: 0 solid var(--on-content-panel-background);
+  border-radius: 8px 0 0 0;
+}
