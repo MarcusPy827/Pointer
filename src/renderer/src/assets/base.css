@@ -1,0 +1,13 @@
+:root {
+  --background: #eceff4;
+  --on-background: #4c566a;
+  --subtitle: #999999;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #2e3440;
+    --on-background: #d8dee9;
+    --subtitle: #dddddd;
+  }
+}

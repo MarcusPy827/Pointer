@@ -1,11 +1,16 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import {app, BrowserWindow, ipcMain, shell} from 'electron'
+import {join} from 'path'
+import {electronApp, is, optimizer} from '@electron-toolkit/utils'
+
 import icon from '../../resources/icon.png?asset'
+import {WindowCommandType} from "../shared/WindowCommandType";
+import IpcMainInvokeEvent = Electron.IpcMainInvokeEvent;
+
+let mainWindow: BrowserWindow
 
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
@@ -76,3 +81,24 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// IPC: Window resizing
+ipcMain.handle('resizeWindowAPI', async (_event: IpcMainInvokeEvent, type: WindowCommandType) => {
+  if (!mainWindow) {
+    return
+  }
+
+  switch (type) {
+    case WindowCommandType.kMinimize:
+      mainWindow.minimize()
+      break
+
+    case WindowCommandType.kMaximize:
+      mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize()
+      break
+
+    case WindowCommandType.kClose:
+      mainWindow.close()
+      break
+  }
+})

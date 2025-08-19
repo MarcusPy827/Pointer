@@ -1,5 +1,9 @@
 import { useState } from 'react'
 
+export function getAppVersionString(): string {
+  return '1.0.0'
+}
+
 function Versions(): React.JSX.Element {
   const [versions] = useState(window.electron.process.versions)
 

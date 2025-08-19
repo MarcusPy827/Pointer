@@ -1,0 +1,101 @@
+@import './base.css';
+
+html, body {
+  color: var(--on-background);
+  background: var(--background);
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+.no-select {
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+}
+
+.title-bar {
+  color: var(--on-background);
+  background: var(--background);
+  width: calc(100vw - 24px);
+  height: 48px;
+  padding-left: 16px;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: space-between;
+  align-items: center;
+  -webkit-app-region: drag;
+}
+
+.title-bar-section {
+  color: var(--on-background);
+  background: var(--background);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 12px;
+  -webkit-app-region: no-drag;
+}
+
+.title-bar-btn-section {
+  color: var(--on-background);
+  background: var(--background);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: center;
+  -webkit-app-region: no-drag;
+}
+
+.app-title {
+  color: var(--on-background);
+  background: var(--background);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.app-version {
+  color: var(--on-background);
+  background: var(--background);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.tool-bar {
+  color: var(--on-background);
+  background: var(--background);
+  width: calc(100vw - 32px);
+  height: 64px;
+  padding-left: 16px;
+  padding-right: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: flex-start;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.tool-bar-title {
+  color: var(--on-background);
+  background: var(--background);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.tool-bar-subtitle {
+  color: var(--subtitle);
+  background: var(--background);
+  font-size: 14px;
+  font-weight: 400;
+}
