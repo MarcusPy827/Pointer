@@ -3,8 +3,8 @@ import {ConfigProvider, Splitter, theme} from "antd"
 import TitleBar from "./components/TitleBar"
 import ToolBar from "./components/ToolBar"
 import MyLibrary from "./pages/MyLibrary"
+import ErrNoWorkspaceOpened from "./pages/ErrNoWorkspaceOpened"
 import "./assets/main.css"
-import ErrNoWorkspaceOpened from "@renderer/pages/ErrNoWorkspaceOpened";
 
 const WorkspaceStateContext:Context<{}> = createContext({})
 const workspacePathContext: Context<{}> = createContext({})
