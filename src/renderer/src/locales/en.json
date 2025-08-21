@@ -1,7 +1,14 @@
 {
+  "ok_text": "OK",
+  "cancel_text": "Cancel",
   "my_workspace_title": "My Workspace",
   "no_workspace_opened_title": "No Workspace Opened",
   "open_workspace_desc": "To open a workspace, you may visit the menu bar's \"File\" section or simply select one option from below: ",
   "open_workspace_action": "Open workspace",
-  "create_workspace_action": "Create workspace"
+  "create_workspace_action": "Create workspace",
+  "create_workspace_title": "Create workspace",
+  "workspace_name_label_desc": "Workspace name",
+  "workspace_path_label_desc": "Workspace path",
+  "workspace_icon_settings_desc": "You may change the workspace icon in \"settings\" later.",
+  "browse_action": "Browse"
 }

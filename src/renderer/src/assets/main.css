@@ -131,3 +131,7 @@ html, body {
 .app-text {
   font-size: 16px;
 }
+
+.app-text-smaller {
+  font-size: 14px;
+}

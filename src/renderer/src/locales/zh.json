@@ -1,7 +1,14 @@
 {
+  "ok_text": "确认",
+  "cancel_text": "取消",
   "my_workspace_title": "我的工作区",
   "no_workspace_opened_title": "没有打开的工作区",
   "open_workspace_desc": "要打开工作区，您可以使用菜单栏上的“文件”菜单或者在以下选项中选择一项：",
   "open_workspace_action": "打开工作区",
-  "create_workspace_action": "创建工作区"
+  "create_workspace_action": "创建工作区",
+  "create_workspace_title": "创建工作区",
+  "workspace_name_label_desc": "工作区名称",
+  "workspace_path_label_desc": "工作区路径",
+  "workspace_icon_settings_desc": "稍后您可以在“设置”中更改工作区图标",
+  "browse_action": "浏览"
 }
