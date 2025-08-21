@@ -43,6 +43,19 @@ FileHandlerResult FileHandler::CheckDirectoryExists(std::string path,
   std::error_code err_code;
 
   if (std::filesystem::is_directory(folder_path, err_code)) {
+    if (err_code) {
+      std::string err_msg = "❌ Failed to check directory. ";
+      absl::StrAppend(&err_msg, "An error occurred.\n");
+      absl::StrAppend(&err_msg, absl::StrFormat("Error code: %d.\n",
+        err_code.value()));
+      absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n",
+        err_code.message()));
+
+      LOG(ERROR) << err_msg;
+      result.msg = err_msg;
+      return result;
+    }
+
     std::string result_msg = "✔ The folder exists. ";
     if (create_mode) {
       absl::StrAppend(&result_msg, "There is no need to create it.");
@@ -51,25 +64,6 @@ FileHandlerResult FileHandler::CheckDirectoryExists(std::string path,
     LOG(INFO) << result_msg;
     result.result = true;
     result.msg = result_msg;
-    return result;
-  }
-
-  if (err_code) {
-    std::string err_msg = "❌ Failed to check directory. ";
-    absl::StrAppend(&err_msg, "An error occurred.\n");
-    absl::StrAppend(&err_msg, absl::StrFormat("Error code: %d.\n",
-      err_code.value()));
-    absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n",
-      err_code.message()));
-
-    LOG(ERROR) << err_msg;
-    result.msg = err_msg;
-    return result;
-  } else {
-    std::string err_msg =
-      "❌ Failed to check directory due to an unknown error.";
-    LOG(ERROR) << err_msg;
-    result.msg = err_msg;
     return result;
   }
 

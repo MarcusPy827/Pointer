@@ -217,10 +217,9 @@ TEST(FileHandler, PathNOTExists) {
 
 TEST(FileHandler, PathNOTExistsAndCreate) {
   FileHandler file_handler;
-  file_handler.CheckDirectoryExists(kFolderPath, true);
-  auto result = file_handler.CheckDirectoryExists(kFolderPath, false);
+  auto result = file_handler.CheckDirectoryExists(kFolderPath, true);
   ExecAfterScript(kFolderPath);
-  EXPECT_FALSE(GetTestResult(result));
+  EXPECT_TRUE(GetTestResult(result));
 }
 
 TEST(FileHandler, PathNOTExistsButFileExist) {
