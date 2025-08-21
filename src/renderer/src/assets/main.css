@@ -9,10 +9,10 @@ html, body {
 }
 
 .no-select {
-  user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
+  user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 .title-bar {
@@ -121,4 +121,13 @@ html, body {
   background: var(--content-panel-background);
   border: 0 solid var(--on-content-panel-background);
   border-radius: 18px 0 0 0;
+}
+
+.no-workspace-opened-container {
+  padding: 16px;
+  font-size: 16px;
+}
+
+.app-text {
+  font-size: 16px;
 }
