@@ -1,10 +1,11 @@
-import {app, BrowserWindow, ipcMain, shell} from 'electron'
+import {app, BrowserWindow, ipcMain, shell, dialog} from 'electron'
 import {join} from 'path'
 import {electronApp, is, optimizer} from '@electron-toolkit/utils'
 
 import icon from '../../resources/icon.png?asset'
 import {WindowCommandType} from "../shared/WindowCommandType";
 import IpcMainInvokeEvent = Electron.IpcMainInvokeEvent;
+import {FolderPath} from "../shared/FolderPath";
 
 let mainWindow: BrowserWindow
 
@@ -100,5 +101,26 @@ ipcMain.handle('resizeWindowAPI', async (_event: IpcMainInvokeEvent, type: Windo
     case WindowCommandType.kClose:
       mainWindow.close()
       break
+  }
+})
+
+// IPC: Open folder
+ipcMain.handle('openFolderAPI', async (_event: IpcMainInvokeEvent, title: string, btnLabel: string): Promise<FolderPath> => {
+  const result = await dialog.showOpenDialog({
+    title: title,
+    buttonLabel: btnLabel,
+    properties: ['openDirectory']
+  })
+
+  if (result.canceled) {
+    return {
+      cancelled: true,
+      path: ''
+    }
+  } else {
+    return {
+      cancelled: false,
+      path: result.filePaths.at(0)
+    }
   }
 })

@@ -69,17 +69,17 @@ export default function App(): JSX.Element {
         <WorkspaceConfigProvider>
           <TitleBar />
           <ToolBar />
-          <Splitter className="main-panel-container">
-            <Splitter.Panel className="side-panel" defaultSize="30%" min="25%" max="30%">
+          <div className="main-panel-container">
+            <div className="side-panel">
               <div className="side-panel-content">
                 [Work in progress...]
               </div>
-            </Splitter.Panel>
+            </div>
 
-            <Splitter.Panel className="content-panel">
+            <div className="content-panel">
               {isWorkspaceOpened ? <MyLibrary /> : <ErrNoWorkspaceOpened />}
-            </Splitter.Panel>
-          </Splitter>
+            </div>
+          </div>
         </WorkspaceConfigProvider>
       </ConfigProvider>
     </>
