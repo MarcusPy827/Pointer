@@ -1,0 +1,7 @@
+# Abseil
+# Comment the code below if you have Abseil installed on PATH, if NOT in your
+# environment PATH, then uncomment the code and specify the path to Abseil
+# library.
+
+set(absl_DIR "C:/local/absl/lib/cmake/absl")
+set(absl_ROOT "C:/local/absl/lib/cmake/absl")

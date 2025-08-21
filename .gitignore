@@ -2,6 +2,7 @@ node_modules
 dist
 out
 build
+src/backend_test/file_handler/build
 .DS_Store
 .eslintcache
 *.log*
