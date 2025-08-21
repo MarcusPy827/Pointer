@@ -19,10 +19,39 @@ cmake -B build -S .  -DCMAKE_BUILD_TYPE=Release  -DCMAKE_CXX_STANDARD=17  -DCMAK
 
 ```bat
 cmake --build build --config Release
+cmake --install build --config Release
 ```
 
 ```bat
+cmake --build build --config Debug
+cmake --install build --config Debug
+```
+
+**注意**：您可以设置`DCMAKE_INSTALL_PREFIX`为任何您觉得合适的目录。
+
+### GTest
+首先，克隆GTest的代码到本地。
+
+确保CMake在系统上可用，然后`cd`至GTest源代码的位置：
+
+```Shell
+cd /path/to/gtest/git/source/cloned/
+```
+
+然后，使用CMake编译并安装这个库。以下是Windows上的示例：
+
+```bat
+cmake -B build -S .  -DCMAKE_BUILD_TYPE=Release  -DCMAKE_CXX_STANDARD=17  -DCMAKE_CXX_STANDARD_REQUIRED=ON  -DABSL_PROPAGATE_CXX_STD=ON  -DCMAKE_INSTALL_PREFIX="C:/local/gtest"
+```
+
+```bat
+cmake --build build --config Release
 cmake --install build --config Release
+```
+
+```bat
+cmake --build build --config Debug
+cmake --install build --config Debug
 ```
 
 **注意**：您可以设置`DCMAKE_INSTALL_PREFIX`为任何您觉得合适的目录。
@@ -32,7 +61,7 @@ cmake --install build --config Release
 
 ```cmake
 set(absl_DIR "C:/local/absl/lib/cmake/absl")
-set(absl_ROOT "C:/local/absl/lib/cmake/absl")
+set(GTest_DIR "C:/local/gtest/lib/cmake/gtest")
 ```
 
 **注意**：这里的路径仅为示例，您需要换为当前环境下各个库的实际路径。

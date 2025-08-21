@@ -19,10 +19,39 @@ cmake -B build -S .  -DCMAKE_BUILD_TYPE=Release  -DCMAKE_CXX_STANDARD=17  -DCMAK
 
 ```bat
 cmake --build build --config Release
+cmake --install build --config Release
 ```
 
 ```bat
+cmake --build build --config Debug
+cmake --install build --config Debug
+```
+
+**Note**: You may set `DCMAKE_INSTALL_PREFIX` to any directory you finds suitable.
+
+### GTest
+First, clone the GTest git library.
+
+Make sure CMake is avaliable in your system, then change directory to the location where you have cloned the GTest source code:
+
+```Shell
+cd /path/to/gtest/git/source/cloned/
+```
+
+Next, use CMake to install it. Here is an example of how you can install the library on Windows:
+
+```bat
+cmake -B build -S .  -DCMAKE_BUILD_TYPE=Release  -DCMAKE_CXX_STANDARD=17  -DCMAKE_CXX_STANDARD_REQUIRED=ON  -DABSL_PROPAGATE_CXX_STD=ON  -DCMAKE_INSTALL_PREFIX="C:/local/gtest"
+```
+
+```bat
+cmake --build build --config Release
 cmake --install build --config Release
+```
+
+```bat
+cmake --build build --config Debug
+cmake --install build --config Debug
 ```
 
 **Note**: You may set `DCMAKE_INSTALL_PREFIX` to any directory you finds suitable.
@@ -32,7 +61,7 @@ Ensure that you have already installed all the libraries, if you have all the li
 
 ```cmake
 set(absl_DIR "C:/local/absl/lib/cmake/absl")
-set(absl_ROOT "C:/local/absl/lib/cmake/absl")
+set(GTest_DIR "C:/local/gtest/lib/cmake/gtest")
 ```
 
 **Note**: The path here is an example, you'll need to change it to the actual path.

@@ -11,12 +11,30 @@ endif()
 include_directories(${CMAKE_SOURCE_DIR})
 
 find_package(absl CONFIG REQUIRED)
+find_package(GTest CONFIG REQUIRED)
 
-add_executable(file_handler
+add_library(file_handler STATIC
   src/file_handler.h
   src/file_handler.cc
 )
 
 target_link_libraries(file_handler PRIVATE
   absl::base
+  absl::log
 )
+
+include(CTest)
+if(BUILD_TESTING)
+  add_executable(file_handler_test
+    src/file_handler_test.cc
+  )
+  target_link_libraries(file_handler_test PRIVATE
+    file_handler
+    absl::base
+    absl::log
+    GTest::gtest_main
+  )
+
+  include(GoogleTest)
+  gtest_discover_tests(file_handler_test)
+endif()

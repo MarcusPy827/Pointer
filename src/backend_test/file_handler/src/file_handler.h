@@ -19,12 +19,21 @@
 #ifndef SRC_FILE_HANDLER_H_
 #define SRC_FILE_HANDLER_H_
 
+#include <string>
+
+#include "src/file_handler.h"
+
 namespace pointer {
 namespace eval {
 
-class file_handler {
+struct FileHandlerResult {
+  bool result = false;
+  std::string msg;
+};
+
+class FileHandler {
  public:
-  bool CheckFolderExist(bool create_mode);
+  FileHandlerResult CheckDirectoryExists(std::string path, bool create_mode);
 };
 
 }  // namespace eval
