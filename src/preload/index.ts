@@ -1,11 +1,15 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { WindowCommandType } from '../shared/WindowCommandType'
+import { FolderPath } from "../shared/FolderPath"
 
 // Custom APIs for renderer
 const api = {
   // API: Window resize
-  resizeWindowFunc: (type: WindowCommandType) => ipcRenderer.invoke('resizeWindowAPI', type)
+  resizeWindowFunc: (type: WindowCommandType) => ipcRenderer.invoke('resizeWindowAPI', type),
+
+  // API: Open folder
+  openFolderFunc: (): Promise<FolderPath> => ipcRenderer.invoke('openFolderAPI'),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -10,5 +10,6 @@
   "workspace_name_label_desc": "工作区名称",
   "workspace_path_label_desc": "工作区路径",
   "workspace_icon_settings_desc": "稍后您可以在“设置”中更改工作区图标",
-  "browse_action": "浏览"
+  "browse_action": "浏览",
+  "cancelled_message": "已取消"
 }

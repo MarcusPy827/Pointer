@@ -1,13 +1,17 @@
-import { JSX, useState } from "react"
-import { Typography, Modal, Input, Space, Button } from "antd"
+import {ChangeEvent, JSX, useState} from "react"
+import { Typography, Modal, Input, Space, Button, message } from "antd"
 import { FolderOpenOutlined, FolderAddOutlined, EditOutlined, FolderOutlined } from "@ant-design/icons"
 import { useTranslation } from "react-i18next";
+import {FolderPath} from "../../../shared/FolderPath";
 
 export default function ErrNoWorkspaceOpened():JSX.Element {
   const { t } = useTranslation();
 
+  const [messageApi, contextHolder] = message.useMessage();
   const [isWorkspaceCreationDialogOpened, setIsWorkspaceCreationDialogOpened] = useState(false)
   const [workspaceCreationDialogLoading, setWorkspaceCreationDialogLoading] = useState(false)
+  const [workspaceName, setWorkspaceName] = useState<string>("")
+  const [workspacePath, setWorkspacePath] = useState<string>("")
 
   const showWorkspaceCreationDialog = () => {
     setIsWorkspaceCreationDialogOpened(true)
@@ -25,8 +29,23 @@ export default function ErrNoWorkspaceOpened():JSX.Element {
     setIsWorkspaceCreationDialogOpened(false)
   }
 
+  const handleWorkspaceBrowse = async ():void => {
+    const result:FolderPath = await window.api.openFolderFunc()
+    if (result.cancelled) {
+      messageApi.open({
+        type: 'warning',
+        content: t('cancelled_message')
+      })
+    } else {
+      if (result.path != undefined) {
+        setWorkspacePath(result.path)
+      }
+    }
+  }
+
   return (
     <>
+      {contextHolder}
       <Modal
         title={t('create_workspace_title')}
         open={isWorkspaceCreationDialogOpened}
@@ -48,8 +67,8 @@ export default function ErrNoWorkspaceOpened():JSX.Element {
         </Typography.Text>
         <br className="no-select" draggable={false} />
         <Space.Compact style={{ width: '100%' }}>
-          <Input className="no-select" prefix={<FolderOutlined />} draggable={false} />
-          <Button type="primary">{t('browse_action')}</Button>
+          <Input className="no-select" prefix={<FolderOutlined />} draggable={false} value={workspacePath} onChange={(event: ChangeEvent<HTMLInputElement>) => setWorkspacePath(event.target.value)} />
+          <Button type="primary" onClick={() => handleWorkspaceBrowse()}>{t('browse_action')}</Button>
         </Space.Compact>
 
         <br className="no-select" draggable={false} />
