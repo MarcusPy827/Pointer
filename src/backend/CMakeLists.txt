@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.31)
-project(file_handler)
+cmake_minimum_required(VERSION 3.28)
+project(pointer)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./build)
@@ -13,12 +13,12 @@ include_directories(${CMAKE_SOURCE_DIR})
 find_package(absl CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 
-add_library(file_handler STATIC
-  src/file_handler.h
-  src/file_handler.cc
+add_library(pointer STATIC
+  src/file_handler/file_handler.h
+  src/file_handler/file_handler.cc
 )
 
-target_link_libraries(file_handler PRIVATE
+target_link_libraries(pointer PRIVATE
   absl::base
   absl::log
 )
@@ -26,10 +26,10 @@ target_link_libraries(file_handler PRIVATE
 include(CTest)
 if(BUILD_TESTING)
   add_executable(file_handler_test
-    src/file_handler_test.cc
+    src/file_handler/file_handler_test.cc
   )
   target_link_libraries(file_handler_test PRIVATE
-    file_handler
+    pointer
     absl::base
     absl::log
     GTest::gtest_main

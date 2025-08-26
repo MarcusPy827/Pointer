@@ -1,11 +1,13 @@
-import {app, BrowserWindow, ipcMain, shell, dialog} from 'electron'
-import {join} from 'path'
-import {electronApp, is, optimizer} from '@electron-toolkit/utils'
+import { app, BrowserWindow, ipcMain, shell, dialog } from 'electron'
+import { join } from 'path'
+import { electronApp, is, optimizer } from '@electron-toolkit/utils'
+import { WindowCommandType } from '../shared/WindowCommandType'
+import { FolderPath } from '../shared/FolderPath'
+import { DirectoryExistResult } from '../shared/BackendPromise'
 
 import icon from '../../resources/icon.png?asset'
-import {WindowCommandType} from "../shared/WindowCommandType";
-import IpcMainInvokeEvent = Electron.IpcMainInvokeEvent;
-import {FolderPath} from "../shared/FolderPath";
+import IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
+import backend from '../../build/Release/pointer_core.node'
 
 let mainWindow: BrowserWindow
 
@@ -105,22 +107,42 @@ ipcMain.handle('resizeWindowAPI', async (_event: IpcMainInvokeEvent, type: Windo
 })
 
 // IPC: Open folder
-ipcMain.handle('openFolderAPI', async (_event: IpcMainInvokeEvent, title: string, btnLabel: string): Promise<FolderPath> => {
-  const result = await dialog.showOpenDialog({
-    title: title,
-    buttonLabel: btnLabel,
-    properties: ['openDirectory']
-  })
+ipcMain.handle(
+  'openFolderAPI',
+  async (_event: IpcMainInvokeEvent, title: string, btnLabel: string): Promise<FolderPath> => {
+    const result = await dialog.showOpenDialog({
+      title: title,
+      buttonLabel: btnLabel,
+      properties: ['openDirectory']
+    })
 
-  if (result.canceled) {
-    return {
-      cancelled: true,
-      path: ''
-    }
-  } else {
-    return {
-      cancelled: false,
-      path: result.filePaths.at(0)
+    if (result.canceled) {
+      return {
+        cancelled: true,
+        path: ''
+      }
+    } else {
+      return {
+        cancelled: false,
+        path: result.filePaths.at(0)
+      }
     }
   }
-})
+)
+
+// IPC: Check if directory exists
+ipcMain.handle(
+  'checkIfDirectoryExistsAPI',
+  async (
+    _event: IpcMainInvokeEvent,
+    path: string,
+    create_mode: boolean
+  ): Promise<DirectoryExistResult> => {
+    const result = backend.checkIfDirectoryExists(path, create_mode)
+    const mapped_result: DirectoryExistResult = {
+      result: result.result,
+      result_msg: result.msg
+    }
+    return mapped_result
+  }
+)

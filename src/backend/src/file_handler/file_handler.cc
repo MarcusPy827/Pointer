@@ -22,10 +22,10 @@
 #include "absl/log/log.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
-#include "src/file_handler.h"
+#include "src/file_handler/file_handler.h"
 
 namespace pointer {
-namespace eval {
+namespace core {
 
 FileHandlerResult FileHandler::CheckDirectoryExists(std::string path,
     bool create_mode) {
@@ -113,5 +113,5 @@ FileHandlerResult FileHandler::CheckDirectoryExists(std::string path,
   }
 }
 
-}  // namespace eval
+}  // namespace core
 }  // namespace pointer

@@ -26,7 +26,7 @@
 #include "absl/strings/str_format.h"
 #include "absl/strings/str_cat.h"
 
-#include "src/file_handler.h"
+#include "src/file_handler/file_handler.h"
 
 namespace pointer {
 namespace eval {
@@ -125,7 +125,7 @@ void CreateFile(std::string path) {
   LOG(INFO) << result_msg;
 }
 
-bool GetTestResult(FileHandlerResult result) {
+bool GetTestResult(pointer::core::FileHandlerResult result) {
   if (!result.msg.empty()) {
     LOG(INFO) << result.msg;
   }
@@ -186,7 +186,7 @@ const char kFolderPath[] = "./example_path";
 }  // namespace
 
 TEST(UtilTest, GetPassedTestResult) {
-  FileHandlerResult result_gen;
+  pointer::core::FileHandlerResult result_gen;
   result_gen.result = true;
   result_gen.msg = "This is a message from a passed test.";
 
@@ -194,7 +194,7 @@ TEST(UtilTest, GetPassedTestResult) {
 }
 
 TEST(UtilTest, GetFailedTestResult) {
-  FileHandlerResult result_gen;
+  pointer::core::FileHandlerResult result_gen;
   result_gen.result = false;
   result_gen.msg = "This is a message from a failed test.";
 
@@ -203,20 +203,20 @@ TEST(UtilTest, GetFailedTestResult) {
 
 TEST(FileHandler, PathExists) {
   CreateDirectory(kFolderPath);
-  FileHandler file_handler;
+  pointer::core::FileHandler file_handler;
   auto result = file_handler.CheckDirectoryExists(kFolderPath, false);
   ExecAfterScript(kFolderPath);
   EXPECT_TRUE(GetTestResult(result));
 }
 
 TEST(FileHandler, PathNOTExists) {
-  FileHandler file_handler;
+  pointer::core::FileHandler file_handler;
   auto result = file_handler.CheckDirectoryExists(kFolderPath, false);
   EXPECT_FALSE(GetTestResult(result));
 }
 
 TEST(FileHandler, PathNOTExistsAndCreate) {
-  FileHandler file_handler;
+  pointer::core::FileHandler file_handler;
   auto result = file_handler.CheckDirectoryExists(kFolderPath, true);
   ExecAfterScript(kFolderPath);
   EXPECT_TRUE(GetTestResult(result));
@@ -224,7 +224,7 @@ TEST(FileHandler, PathNOTExistsAndCreate) {
 
 TEST(FileHandler, PathNOTExistsButFileExist) {
   CreateFile(kFolderPath);
-  FileHandler file_handler;
+  pointer::core::FileHandler file_handler;
   auto result = file_handler.CheckDirectoryExists(kFolderPath, false);
   ExecAfterScript(kFolderPath);
   EXPECT_FALSE(GetTestResult(result));

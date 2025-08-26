@@ -18,7 +18,10 @@
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux"
+    "build:linux": "electron-vite build && electron-builder --linux",
+    "backend_configure": "npx node-gyp configure",
+    "backend_build": "npx node-gyp build",
+    "backend_clean": "npx node-gyp clean"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
@@ -28,6 +31,7 @@
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
     "mdui": "^1.0.2",
+    "node-addon-api": "^8.5.0",
     "react-i18next": "^15.7.0"
   },
   "devDependencies": {
@@ -41,6 +45,7 @@
     "electron": "^37.2.3",
     "electron-builder": "^25.1.8",
     "electron-vite": "^4.0.0",
+    "esbuild-plugin-copy": "^2.1.1",
     "eslint": "^9.31.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
