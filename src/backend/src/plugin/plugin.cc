@@ -68,7 +68,7 @@ Napi::Value CheckDirectoryExistsWrapper(const Napi::CallbackInfo&
 
   // Execute function
   pointer::core::FileHandlerResult original_result = file_handler_
-    .CheckDirectoryExists(dir_path, create_mode);
+    .CheckIfDirectoryExists(dir_path, create_mode);
   result = FileHandlerResult2Object(env, original_result);
   return result;
 }

@@ -31,7 +31,10 @@ struct FileHandlerResult {
 
 class FileHandler {
  public:
-  FileHandlerResult CheckDirectoryExists(std::string path, bool create_mode);
+  FileHandlerResult CheckIsDirectoryExists(std::string path, bool create_mode);
+
+  FileHandlerResult CheckIsDirectoryEmpty(std::string path,
+    bool ignore_hidden_files, bool create_mode);
 };
 
 }  // namespace core

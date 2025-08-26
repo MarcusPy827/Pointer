@@ -27,7 +27,7 @@
 namespace pointer {
 namespace core {
 
-FileHandlerResult FileHandler::CheckDirectoryExists(std::string path,
+FileHandlerResult FileHandler::CheckIsDirectoryExists(std::string path,
     bool create_mode) {
   FileHandlerResult result;
 
@@ -108,6 +108,58 @@ FileHandlerResult FileHandler::CheckDirectoryExists(std::string path,
     std::string err_msg =
       "❌ Failed to check directory due to an unknown error.";
     LOG(ERROR) << err_msg;
+    result.msg = err_msg;
+    return result;
+  }
+}
+
+FileHandlerResult FileHandler::CheckIsDirectoryEmpty(std::string path,
+    bool ignore_hidden_files, bool create_mode) {
+  FileHandlerResult result;
+  bool is_hidden_file_accessed = false;
+  std::string err_msg;
+
+  try {
+    auto is_folder_exist = CheckIsDirectoryExists(path, create_mode);
+    if (!is_folder_exist.result) {
+      return is_folder_exist;
+    }
+
+    for (const auto& entry : std::filesystem::directory_iterator(path)) {
+      std::string current_filename = entry.path().filename().string();
+
+      if (current_filename.empty()) {
+        continue;
+      } else if (ignore_hidden_files && !current_filename.empty() &&
+          current_filename[0] == '.') {
+        is_hidden_file_accessed = true;
+        continue;
+      }
+
+      err_msg = absl::StrCat("❌ The directory is NOT empty!!");
+      result.msg = err_msg;
+      return result;
+    }
+
+    result.result = true;
+    return result;
+  } catch (const std::filesystem::filesystem_error& e) {
+    err_msg = absl::StrFormat(
+      "⛔ A filesystem error occurred during directory check. "
+      "The backend returned: %s",
+      e.what());
+    result.msg = err_msg;
+    return result;
+  } catch (const std::exception& e) {
+    err_msg = absl::StrFormat(
+      "⛔ An exception occurred during directory check. "
+      "The backend returned: %s",
+      e.what());
+    result.msg = err_msg;
+    return result;
+  } catch (...) {
+    err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during directory check, aborting...");
     result.msg = err_msg;
     return result;
   }

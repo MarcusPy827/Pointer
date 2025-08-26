@@ -11,5 +11,7 @@
   "workspace_path_label_desc": "工作区路径",
   "workspace_icon_settings_desc": "稍后您可以在“设置”中更改工作区图标",
   "browse_action": "浏览",
-  "cancelled_message": "已取消"
+  "cancelled_message": "已取消",
+  "err_empty_workspace_name": "工作区名称为空，请指定一个",
+  "err_empty_workspace_path": "工作区路径为空，请指定一个"
 }

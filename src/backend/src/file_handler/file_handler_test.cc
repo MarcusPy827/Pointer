@@ -183,6 +183,8 @@ void ExecAfterScript(std::string path) {
 }
 
 const char kFolderPath[] = "./example_path";
+const char kFolderContentPath[] = "./example_path/example_content";
+const char kHiddenFilePath[] = "./example_path/.example_content";
 }  // namespace
 
 TEST(UtilTest, GetPassedTestResult) {
@@ -204,20 +206,20 @@ TEST(UtilTest, GetFailedTestResult) {
 TEST(FileHandler, PathExists) {
   CreateDirectory(kFolderPath);
   pointer::core::FileHandler file_handler;
-  auto result = file_handler.CheckDirectoryExists(kFolderPath, false);
+  auto result = file_handler.CheckIsDirectoryExists(kFolderPath, false);
   ExecAfterScript(kFolderPath);
   EXPECT_TRUE(GetTestResult(result));
 }
 
 TEST(FileHandler, PathNOTExists) {
   pointer::core::FileHandler file_handler;
-  auto result = file_handler.CheckDirectoryExists(kFolderPath, false);
+  auto result = file_handler.CheckIsDirectoryExists(kFolderPath, false);
   EXPECT_FALSE(GetTestResult(result));
 }
 
 TEST(FileHandler, PathNOTExistsAndCreate) {
   pointer::core::FileHandler file_handler;
-  auto result = file_handler.CheckDirectoryExists(kFolderPath, true);
+  auto result = file_handler.CheckIsDirectoryExists(kFolderPath, true);
   ExecAfterScript(kFolderPath);
   EXPECT_TRUE(GetTestResult(result));
 }
@@ -225,9 +227,75 @@ TEST(FileHandler, PathNOTExistsAndCreate) {
 TEST(FileHandler, PathNOTExistsButFileExist) {
   CreateFile(kFolderPath);
   pointer::core::FileHandler file_handler;
-  auto result = file_handler.CheckDirectoryExists(kFolderPath, false);
+  auto result = file_handler.CheckIsDirectoryExists(kFolderPath, false);
   ExecAfterScript(kFolderPath);
   EXPECT_FALSE(GetTestResult(result));
 }
+
+TEST(CheckIsDirectoryEmpty, PathEmpty) {
+  CreateDirectory(kFolderPath);
+  pointer::core::FileHandler file_handler;
+  auto result = file_handler.CheckIsDirectoryEmpty(kFolderPath, false, false);
+  ExecAfterScript(kFolderPath);
+  EXPECT_TRUE(GetTestResult(result));
+}
+
+TEST(CheckIsDirectoryEmpty, PathNOTEmpty) {
+  CreateDirectory(kFolderPath);
+  CreateDirectory(kFolderContentPath);
+  pointer::core::FileHandler file_handler;
+  auto result = file_handler.CheckIsDirectoryEmpty(kFolderPath, false, false);
+  ExecAfterScript(kFolderContentPath);
+  ExecAfterScript(kFolderPath);
+  EXPECT_FALSE(GetTestResult(result));
+}
+
+TEST(CheckIsDirectoryEmpty, PathNOTEmptyWithHiddenFolder) {
+  CreateDirectory(kFolderPath);
+  CreateDirectory(kHiddenFilePath);
+  pointer::core::FileHandler file_handler;
+  auto result = file_handler.CheckIsDirectoryEmpty(kFolderPath, false, false);
+  ExecAfterScript(kHiddenFilePath);
+  ExecAfterScript(kFolderPath);
+  EXPECT_FALSE(GetTestResult(result));
+}
+
+TEST(CheckIsDirectoryEmpty, PathNOTEmptyWithHiddenFolderIgnored) {
+  CreateDirectory(kFolderPath);
+  CreateDirectory(kHiddenFilePath);
+  pointer::core::FileHandler file_handler;
+  auto result = file_handler.CheckIsDirectoryEmpty(kFolderPath, true, false);
+  ExecAfterScript(kHiddenFilePath);
+  ExecAfterScript(kFolderPath);
+  EXPECT_TRUE(GetTestResult(result));
+}
+
+TEST(CheckIsDirectoryEmpty, PathNOTEmptyWithHiddenFile) {
+  CreateDirectory(kFolderPath);
+  CreateFile(kHiddenFilePath);
+  pointer::core::FileHandler file_handler;
+  auto result = file_handler.CheckIsDirectoryEmpty(kFolderPath, false, false);
+  ExecAfterScript(kHiddenFilePath);
+  ExecAfterScript(kFolderPath);
+  EXPECT_FALSE(GetTestResult(result));
+}
+
+TEST(CheckIsDirectoryEmpty, PathNOTEmptyWithHiddenFileIgnored) {
+  CreateDirectory(kFolderPath);
+  CreateFile(kHiddenFilePath);
+  pointer::core::FileHandler file_handler;
+  auto result = file_handler.CheckIsDirectoryEmpty(kFolderPath, true, false);
+  ExecAfterScript(kHiddenFilePath);
+  ExecAfterScript(kFolderPath);
+  EXPECT_TRUE(GetTestResult(result));
+}
+
+TEST(CheckIsDirectoryEmpty, PathNOTExistWithCreateMode) {
+  pointer::core::FileHandler file_handler;
+  auto result = file_handler.CheckIsDirectoryEmpty(kFolderPath, true, true);
+  ExecAfterScript(kFolderPath);
+  EXPECT_TRUE(GetTestResult(result));
+}
+
 }  // namespace eval
 }  // namespace pointer
