@@ -16,15 +16,13 @@
  * NOTE: This software comes with ABSOLUTELY NO WARRANTY. Use at your own risk.
  */
 
-#ifndef SRC_FILE_HANDLER_H_
-#define SRC_FILE_HANDLER_H_
+#ifndef SRC_BACKEND_SRC_FILE_HANDLER_FILE_HANDLER_H_
+#define SRC_BACKEND_SRC_FILE_HANDLER_FILE_HANDLER_H_
 
 #include <string>
 
-#include "src/file_handler.h"
-
 namespace pointer {
-namespace eval {
+namespace core {
 
 struct FileHandlerResult {
   bool result = false;
@@ -36,7 +34,7 @@ class FileHandler {
   FileHandlerResult CheckDirectoryExists(std::string path, bool create_mode);
 };
 
-}  // namespace eval
+}  // namespace core
 }  // namespace pointer
 
-#endif  // SRC_FILE_HANDLER_H_
+#endif  // SRC_BACKEND_SRC_FILE_HANDLER_FILE_HANDLER_H_

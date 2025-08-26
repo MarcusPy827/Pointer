@@ -1,0 +1,82 @@
+/*
+ * Copyright 2025 MarcusPy827
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * NOTE: This software comes with ABSOLUTELY NO WARRANTY. Use at your own risk.
+ */
+
+#define NAPI_DISABLE_CPP_EXCEPTIONS
+
+#include <napi.h>  // NOLINT
+
+#include "../file_handler/file_handler.h"
+
+pointer::core::FileHandler file_handler_;
+
+inline Napi::Object FileHandlerResult2Object(Napi::Env env,
+    pointer::core::FileHandlerResult result) {
+  Napi::Object object_gen = Napi::Object::New(env);
+  object_gen.Set("result", Napi::Boolean::New(env, result.result));
+  object_gen.Set("msg", Napi::String::New(env, result.msg));
+  return object_gen;
+}
+
+inline Napi::Object ThrowError(Napi::Env env, const std::string_view err_msg) {
+  Napi::Object object_gen = Napi::Object::New(env);
+  object_gen.Set("result", Napi::Boolean::New(env, false));
+  object_gen.Set("msg", Napi::String::New(env, err_msg.data()));
+  return object_gen;
+}
+
+Napi::Value CheckDirectoryExistsWrapper(const Napi::CallbackInfo&
+    callback_info) {
+  Napi::Env env = callback_info.Env();
+  Napi::Object result;
+  std::string_view err_msg;
+
+  if (callback_info.Length() != 2) {
+    err_msg = "Argument amount MISMATCH!! Except 2 arguments, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  } else if (!callback_info[0].IsString()) {
+    err_msg =
+      "Argument type MISMATCH!! The first argument MUST be string, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  } else if (!callback_info[1].IsBoolean()) {
+    err_msg =
+      "Argument type MISMATCH!! "
+      "The first argument MUST be boolean, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  }
+
+  // Get argument
+  std::string dir_path = callback_info[0].As<Napi::String>().Utf8Value();
+  bool create_mode = callback_info[1].As<Napi::Boolean>().Value();
+
+  // Execute function
+  pointer::core::FileHandlerResult original_result = file_handler_
+    .CheckDirectoryExists(dir_path, create_mode);
+  result = FileHandlerResult2Object(env, original_result);
+  return result;
+}
+
+static Napi::Object Init(Napi::Env env, Napi::Object exports) {
+  exports.Set("checkDirectoryExists", Napi::Function::New(env,
+    CheckDirectoryExistsWrapper, "checkDirectoryExists"));
+  return exports;
+}
+
+NODE_API_MODULE(pointer_core, Init)

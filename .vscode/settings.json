@@ -7,5 +7,7 @@
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "cmake.sourceDirectory": "/home/yue/Desktop/Repositories/Public/Pointer/src/backend",
+  "C_Cpp.errorSquiggles": "enabled"
 }
