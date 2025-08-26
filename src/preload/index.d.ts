@@ -1,10 +1,12 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
 import { WindowCommandType } from '../shared/WindowCommandType'
-import { FolderPath } from "../shared/FolderPath"
+import { FolderPath } from '../shared/FolderPath'
+import { DirectoryExistResult } from '../shared/BackendPromise'
 
 interface RenderAPI {
-  resizeWindowFunc: (type: WindowCommandType) => Promise<void>,
+  resizeWindowFunc: (type: WindowCommandType) => Promise<void>
   openFolderFunc: () => Promise<FolderPath>
+  checkIfDirectoryExistsFunc: (path: string, create_mode: boolean) => Promise<DirectoryExistResult>
 }
 
 declare global {

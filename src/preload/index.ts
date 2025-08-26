@@ -1,7 +1,8 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { WindowCommandType } from '../shared/WindowCommandType'
-import { FolderPath } from "../shared/FolderPath"
+import { FolderPath } from '../shared/FolderPath'
+import { DirectoryExistResult } from '../shared/BackendPromise'
 
 // Custom APIs for renderer
 const api = {
@@ -10,6 +11,10 @@ const api = {
 
   // API: Open folder
   openFolderFunc: (): Promise<FolderPath> => ipcRenderer.invoke('openFolderAPI'),
+
+  // API: Check if directory exists
+  checkIfDirectoryExistsFunc: (path: string, create_mode: boolean): Promise<DirectoryExistResult> =>
+    ipcRenderer.invoke('checkIfDirectoryExistsAPI', path, create_mode)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

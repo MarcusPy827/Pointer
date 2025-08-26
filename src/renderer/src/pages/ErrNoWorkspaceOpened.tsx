@@ -1,36 +1,41 @@
-import {ChangeEvent, JSX, useState} from "react"
-import { Typography, Modal, Input, Space, Button, message } from "antd"
-import { FolderOpenOutlined, FolderAddOutlined, EditOutlined, FolderOutlined } from "@ant-design/icons"
-import { useTranslation } from "react-i18next";
-import {FolderPath} from "../../../shared/FolderPath";
+import { ChangeEvent, JSX, useState } from 'react'
+import { Typography, Modal, Input, Space, Button, message } from 'antd'
+import {
+  FolderOpenOutlined,
+  FolderAddOutlined,
+  EditOutlined,
+  FolderOutlined
+} from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
+import { FolderPath } from '../../../shared/FolderPath'
 
-export default function ErrNoWorkspaceOpened():JSX.Element {
-  const { t } = useTranslation();
+export default function ErrNoWorkspaceOpened(): JSX.Element {
+  const { t } = useTranslation()
 
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = message.useMessage()
   const [isWorkspaceCreationDialogOpened, setIsWorkspaceCreationDialogOpened] = useState(false)
   const [workspaceCreationDialogLoading, setWorkspaceCreationDialogLoading] = useState(false)
-  const [workspaceName, setWorkspaceName] = useState<string>("")
-  const [workspacePath, setWorkspacePath] = useState<string>("")
+  const [workspaceName, setWorkspaceName] = useState<string>('')
+  const [workspacePath, setWorkspacePath] = useState<string>('')
 
-  const showWorkspaceCreationDialog = () => {
+  const showWorkspaceCreationDialog = (): void => {
     setIsWorkspaceCreationDialogOpened(true)
   }
 
-  const handleWorkspaceCreation = () => {
+  const handleWorkspaceCreation = (): void => {
     setWorkspaceCreationDialogLoading(true)
     setTimeout(() => {
-      setIsWorkspaceCreationDialogOpened(false);
-      setWorkspaceCreationDialogLoading(false);
-    }, 2000);
+      setIsWorkspaceCreationDialogOpened(false)
+      setWorkspaceCreationDialogLoading(false)
+    }, 2000)
   }
 
-  const handleWorkspaceCreationCancel = () => {
+  const handleWorkspaceCreationCancel = (): void => {
     setIsWorkspaceCreationDialogOpened(false)
   }
 
-  const handleWorkspaceBrowse = async ():void => {
-    const result:FolderPath = await window.api.openFolderFunc()
+  const handleWorkspaceBrowse = async (): Promise<void> => {
+    const result: FolderPath = await window.api.openFolderFunc()
     if (result.cancelled) {
       messageApi.open({
         type: 'warning',
@@ -53,7 +58,8 @@ export default function ErrNoWorkspaceOpened():JSX.Element {
         onOk={() => handleWorkspaceCreation()}
         onCancel={() => handleWorkspaceCreationCancel()}
         okText={t('ok_text')}
-        cancelText={t('cancel_text')}>
+        cancelText={t('cancel_text')}
+      >
         <Typography.Text className="app-text-smaller no-select" draggable={false}>
           {t('workspace_name_label_desc')}
         </Typography.Text>
@@ -67,8 +73,18 @@ export default function ErrNoWorkspaceOpened():JSX.Element {
         </Typography.Text>
         <br className="no-select" draggable={false} />
         <Space.Compact style={{ width: '100%' }}>
-          <Input className="no-select" prefix={<FolderOutlined />} draggable={false} value={workspacePath} onChange={(event: ChangeEvent<HTMLInputElement>) => setWorkspacePath(event.target.value)} />
-          <Button type="primary" onClick={() => handleWorkspaceBrowse()}>{t('browse_action')}</Button>
+          <Input
+            className="no-select"
+            prefix={<FolderOutlined />}
+            draggable={false}
+            value={workspacePath}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              setWorkspacePath(event.target.value)
+            }
+          />
+          <Button type="primary" onClick={() => handleWorkspaceBrowse()}>
+            {t('browse_action')}
+          </Button>
         </Space.Compact>
 
         <br className="no-select" draggable={false} />
@@ -85,9 +101,7 @@ export default function ErrNoWorkspaceOpened():JSX.Element {
           {t('no_workspace_opened_title')}
         </Typography.Title>
 
-        <Typography.Text className="app-text no-select">
-          {t('open_workspace_desc')}
-        </Typography.Text>
+        <Typography.Text className="app-text no-select">{t('open_workspace_desc')}</Typography.Text>
 
         <Typography>
           <ul>
@@ -102,7 +116,8 @@ export default function ErrNoWorkspaceOpened():JSX.Element {
             <li className="no-select">
               <Typography.Link
                 className="app-text no-select"
-                onClick={() => showWorkspaceCreationDialog()}>
+                onClick={() => showWorkspaceCreationDialog()}
+              >
                 <FolderAddOutlined />
                 &nbsp;&nbsp;
                 {t('create_workspace_action')}

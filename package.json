@@ -20,7 +20,8 @@
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:linux": "electron-vite build && electron-builder --linux",
     "backend_configure": "npx node-gyp configure",
-    "backend_build": "npx node-gyp build"
+    "backend_build": "npx node-gyp build",
+    "backend_clean": "npx node-gyp clean"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
@@ -44,6 +45,7 @@
     "electron": "^37.2.3",
     "electron-builder": "^25.1.8",
     "electron-vite": "^4.0.0",
+    "esbuild-plugin-copy": "^2.1.1",
     "eslint": "^9.31.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
