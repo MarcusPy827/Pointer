@@ -203,7 +203,7 @@ TEST(UtilTest, GetFailedTestResult) {
   EXPECT_FALSE(GetTestResult(result_gen));
 }
 
-TEST(FileHandler, PathExists) {
+TEST(CheckIsDirectoryExists, PathExists) {
   CreateDirectory(kFolderPath);
   pointer::core::FileHandler file_handler;
   auto result = file_handler.CheckIsDirectoryExists(kFolderPath, false);
@@ -211,20 +211,20 @@ TEST(FileHandler, PathExists) {
   EXPECT_TRUE(GetTestResult(result));
 }
 
-TEST(FileHandler, PathNOTExists) {
+TEST(CheckIsDirectoryExists, PathNOTExists) {
   pointer::core::FileHandler file_handler;
   auto result = file_handler.CheckIsDirectoryExists(kFolderPath, false);
   EXPECT_FALSE(GetTestResult(result));
 }
 
-TEST(FileHandler, PathNOTExistsAndCreate) {
+TEST(CheckIsDirectoryExists, PathNOTExistsAndCreate) {
   pointer::core::FileHandler file_handler;
   auto result = file_handler.CheckIsDirectoryExists(kFolderPath, true);
   ExecAfterScript(kFolderPath);
   EXPECT_TRUE(GetTestResult(result));
 }
 
-TEST(FileHandler, PathNOTExistsButFileExist) {
+TEST(CheckIsDirectoryExists, PathNOTExistsButFileExist) {
   CreateFile(kFolderPath);
   pointer::core::FileHandler file_handler;
   auto result = file_handler.CheckIsDirectoryExists(kFolderPath, false);
