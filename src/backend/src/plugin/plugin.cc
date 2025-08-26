@@ -57,7 +57,7 @@ Napi::Value CheckDirectoryExistsWrapper(const Napi::CallbackInfo&
   } else if (!callback_info[1].IsBoolean()) {
     err_msg =
       "Argument type MISMATCH!! "
-      "The first argument MUST be boolean, aborting...";
+      "The second argument MUST be boolean, aborting...";
     result = ThrowError(env, err_msg);
     return result;
   }
