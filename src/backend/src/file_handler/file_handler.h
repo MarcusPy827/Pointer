@@ -21,6 +21,8 @@
 
 #include <string>
 
+#include "src/utils/utils.h"
+
 namespace pointer {
 namespace core {
 
@@ -31,7 +33,19 @@ struct FileHandlerResult {
 
 class FileHandler {
  public:
-  FileHandlerResult CheckDirectoryExists(std::string path, bool create_mode);
+  FileHandlerResult CheckIsDirectoryExists(std::string path, bool create_mode);
+
+  FileHandlerResult CheckIsDirectoryEmpty(std::string path,
+    bool ignore_hidden_files, bool create_mode);
+
+  FileHandlerResult CreateWorkSpace(std::string path, std::string name);
+
+ private:
+  FileHandlerResult FolderExists(std::string path);
+
+  FileHandlerResult FileExists(std::string path);
+
+  pointer::utils::Utils utils_helper_ = pointer::utils::Utils();
 };
 
 }  // namespace core

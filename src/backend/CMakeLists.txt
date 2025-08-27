@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(pointer)
+project(pointer LANGUAGES CXX VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./build)
@@ -16,6 +16,10 @@ find_package(GTest CONFIG REQUIRED)
 add_library(pointer STATIC
   src/file_handler/file_handler.h
   src/file_handler/file_handler.cc
+  src/path_handler/path_handler.h
+  src/path_handler/path_handler.cc
+  src/utils/utils.h
+  src/utils/utils.cc
 )
 
 target_link_libraries(pointer PRIVATE

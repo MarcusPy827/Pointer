@@ -16,13 +16,13 @@
  * NOTE: This software comes with ABSOLUTELY NO WARRANTY. Use at your own risk.
  */
 
-#define NAPI_DISABLE_CPP_EXCEPTIONS
-
 #include <napi.h>  // NOLINT
 
 #include "../file_handler/file_handler.h"
+#include "../utils/utils.h"
 
 pointer::core::FileHandler file_handler_;
+pointer::utils::Utils utils_;
 
 inline Napi::Object FileHandlerResult2Object(Napi::Env env,
     pointer::core::FileHandlerResult result) {
@@ -57,7 +57,7 @@ Napi::Value CheckDirectoryExistsWrapper(const Napi::CallbackInfo&
   } else if (!callback_info[1].IsBoolean()) {
     err_msg =
       "Argument type MISMATCH!! "
-      "The first argument MUST be boolean, aborting...";
+      "The second argument MUST be boolean, aborting...";
     result = ThrowError(env, err_msg);
     return result;
   }
@@ -68,7 +68,81 @@ Napi::Value CheckDirectoryExistsWrapper(const Napi::CallbackInfo&
 
   // Execute function
   pointer::core::FileHandlerResult original_result = file_handler_
-    .CheckDirectoryExists(dir_path, create_mode);
+    .CheckIsDirectoryExists(dir_path, create_mode);
+  result = FileHandlerResult2Object(env, original_result);
+  return result;
+}
+
+Napi::Value CheckIsDirectoryEmptyWrapper(const Napi::CallbackInfo&
+    callback_info) {
+  Napi::Env env = callback_info.Env();
+  Napi::Object result;
+  std::string_view err_msg;
+
+  if (callback_info.Length() != 3) {
+    err_msg = "Argument amount MISMATCH!! Except 3 arguments, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  } else if (!callback_info[0].IsString()) {
+    err_msg =
+      "Argument type MISMATCH!! The first argument MUST be string, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  } else if (!callback_info[1].IsBoolean()) {
+    err_msg =
+      "Argument type MISMATCH!! "
+      "The second argument MUST be boolean, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  } else if (!callback_info[2].IsBoolean()) {
+    err_msg =
+      "Argument type MISMATCH!! "
+      "The third argument MUST be boolean, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  }
+
+  // Get argument
+  std::string dir_path = callback_info[0].As<Napi::String>().Utf8Value();
+  bool ignore_hidden_files = callback_info[1].As<Napi::Boolean>().Value();
+  bool create_mode = callback_info[2].As<Napi::Boolean>().Value();
+
+  // Execute function
+  pointer::core::FileHandlerResult original_result = file_handler_
+    .CheckIsDirectoryEmpty(dir_path, ignore_hidden_files, create_mode);
+  result = FileHandlerResult2Object(env, original_result);
+  return result;
+}
+
+Napi::Value CreateWorkspaceWrapper(const Napi::CallbackInfo& callback_info) {
+  Napi::Env env = callback_info.Env();
+  Napi::Object result;
+  std::string_view err_msg;
+
+  if (callback_info.Length() != 2) {
+    err_msg = "Argument amount MISMATCH!! Except 2 arguments, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  } else if (!callback_info[0].IsString()) {
+    err_msg =
+      "Argument type MISMATCH!! The first argument MUST be string, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  } else if (!callback_info[1].IsString()) {
+    err_msg =
+      "Argument type MISMATCH!! "
+      "The second argument MUST be string, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  }
+
+  // Get argument
+  std::string path = callback_info[0].As<Napi::String>().Utf8Value();
+  std::string name = callback_info[1].As<Napi::String>().Utf8Value();
+
+  // Execute function
+  pointer::core::FileHandlerResult original_result = file_handler_
+    .CreateWorkSpace(path, name);
   result = FileHandlerResult2Object(env, original_result);
   return result;
 }
@@ -76,7 +150,11 @@ Napi::Value CheckDirectoryExistsWrapper(const Napi::CallbackInfo&
 static Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("checkDirectoryExists", Napi::Function::New(env,
     CheckDirectoryExistsWrapper, "checkDirectoryExists"));
+  exports.Set("checkIsDirectoryEmpty", Napi::Function::New(env,
+    CheckIsDirectoryEmptyWrapper, "checkIsDirectoryEmpty"));
+  exports.Set("createWorkspace", Napi::Function::New(env,
+    CreateWorkspaceWrapper, "createWorkspace"));
   return exports;
 }
 
-NODE_API_MODULE(pointer_core, Init)
+NODE_API_MODULE(pointer_core, Init);

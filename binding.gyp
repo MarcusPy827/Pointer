@@ -9,16 +9,24 @@
       "sources": [
         "./src/backend/src/plugin/plugin.cc",
         "./src/backend/src/file_handler/file_handler.h",
-        "./src/backend/src/file_handler/file_handler.cc"
+        "./src/backend/src/file_handler/file_handler.cc",
+        "./src/backend/src/path_handler/path_handler.h",
+        "./src/backend/src/path_handler/path_handler.cc",
+        "./src/backend/src/utils/utils.h",
+        "./src/backend/src/utils/utils.cc"
       ],
       "include_dirs": [
         "./node_modules/node-addon-api/",
         "./src/backend/",
         "<(absl_includedir)"
       ],
-      "defines": ["NAPI_DISABLE_CPP_EXCEPTIONS"],
-      "cflags": ["-fno-exceptions"],
-      "cflags_cc": ["-std=gnu++20", "-fPIC"],
+      "defines": [
+        "NODE_ADDON_API_CPP_EXCEPTIONS",
+        "UUID_USING_CXX20_SPAN"
+      ],
+      "cflags": ["-fexceptions"],
+      "cflags_cc!": [ "-fno-exceptions" ],
+      "cflags_cc": ["-fPIC", "-fexceptions", "-std=gnu++20"],
       "conditions": [
         ["OS == 'linux'", {
           "libraries": [
@@ -32,7 +40,8 @@
             "<(absl_libdir)/libabsl_log_severity.a",
             "<(absl_libdir)/libabsl_throw_delegate.a",
             "-Wl,--end-group",
-            "-pthread"
+            "-pthread",
+            "-luuid"
           ],
           "ldflags": ["-Wl,--no-as-needed"]
         }]

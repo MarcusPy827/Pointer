@@ -11,5 +11,7 @@
   "workspace_path_label_desc": "Workspace path",
   "workspace_icon_settings_desc": "You may change the workspace icon in \"settings\" later.",
   "browse_action": "Browse",
-  "cancelled_message": "Cancelled."
+  "cancelled_message": "Cancelled.",
+  "err_empty_workspace_name": "The workspace name is empty, please specify one.",
+  "err_empty_workspace_path": "The workspace path is empty, please specify one."
 }

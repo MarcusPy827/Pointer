@@ -22,12 +22,37 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
     setIsWorkspaceCreationDialogOpened(true)
   }
 
+  const execWorkspaceCreation = async (): Promise<void> => {
+    if (workspaceName === '') {
+      setWorkspaceCreationDialogLoading(false)
+      messageApi.open({
+        type: 'error',
+        content: t('err_empty_workspace_name')
+      })
+      return
+    } else if (workspacePath === '') {
+      setWorkspaceCreationDialogLoading(false)
+      messageApi.open({
+        type: 'error',
+        content: t('err_empty_workspace_path')
+      })
+      return
+    }
+
+    const isFolderExist = await window.api.checkIfDirectoryExistsFunc(workspacePath, true)
+    if (!isFolderExist) {
+      setWorkspaceCreationDialogLoading(false)
+      messageApi.open({
+        type: 'error',
+        content: t('err_empty_workspace_path')
+      })
+      return
+    }
+  }
+
   const handleWorkspaceCreation = (): void => {
     setWorkspaceCreationDialogLoading(true)
-    setTimeout(() => {
-      setIsWorkspaceCreationDialogOpened(false)
-      setWorkspaceCreationDialogLoading(false)
-    }, 2000)
+    execWorkspaceCreation()
   }
 
   const handleWorkspaceCreationCancel = (): void => {
@@ -64,7 +89,12 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
           {t('workspace_name_label_desc')}
         </Typography.Text>
         <br className="no-select" draggable={false} />
-        <Input className="no-select" prefix={<EditOutlined />} draggable={false} />
+        <Input
+          className="no-select"
+          prefix={<EditOutlined />}
+          draggable={false}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => setWorkspaceName(event.target.value)}
+        />
 
         <br className="no-select" draggable={false} />
         <br className="no-select" draggable={false} />
