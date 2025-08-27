@@ -18,6 +18,7 @@
 
 #include <string>
 #include <filesystem>
+#include <fstream>
 
 #include "absl/log/log.h"
 #include "absl/strings/str_cat.h"
@@ -317,9 +318,51 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
       return result;
     }
 
-    // nlohmann::json json_gen
-  } catch(...) {
+    auto owner_id = utils_helper_.GetUserUuid();
+    if (!owner_id.query_result) {
+      result.msg = owner_id.err_msg;
+      return result;
+    }
 
+    nlohmann::json json_gen;
+    json_gen["owners"] = {
+      { "owner", owner_id.result },
+      { "shared_with", {} }
+    };
+
+    json_gen["time"] = {
+      { "created_at", utils_helper_.GetCurrentUtcTime() },
+      { "config_updated_at", utils_helper_.GetCurrentUtcTime() }
+    };
+
+    json_gen["versions"] = {
+      { "created_version", utils_helper_.GetBackendVersionString() },
+      { "min_compactable_version", utils_helper_.GetBackendVersionString() }
+    };
+
+    std::ofstream config_stream("pretty.json");
+    config_stream << std::setw(2) << json_gen << std::endl;
+    config_stream.close();
+
+    result.result = true;
+    return result;
+  } catch (const std::filesystem::filesystem_error& e) {
+    err_msg = absl::StrCat(
+      "⛔ A filesystem error occurred during directory check. ",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    result.msg = err_msg;
+    return result;
+  } catch (const std::exception& e) {
+    err_msg = absl::StrCat(
+      "⛔ An exception occurred during directory check. ",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    result.msg = err_msg;
+    return result;
+  } catch (...) {
+    err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during directory check, aborting...");
+    result.msg = err_msg;
+    return result;
   }
 }
 

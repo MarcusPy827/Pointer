@@ -21,32 +21,17 @@
 
 #include <string>
 
-#include "src/utils/utils.h"
-
 namespace pointer {
 namespace utils {
 
-struct PathHandlerPathResult {
-  bool result = false;
-  std::string err_msg;
-  std::string path;
-};
+
 
 class PathHandler {
  public:
 
-  PathHandlerPathResult FolderExists(std::string path);
 
-  PathHandlerPathResult FileExists(std::string path);
-
-  PathHandlerPathResult GetConfigPath();
-
-  PathHandlerPathResult GetUserUUIDPath();
 
  private:
-  const std::string_view kApplicationName = "marcus.pointer.app";
-
-  pointer::utils::Utils utils_helper_ = pointer::utils::Utils();
 };
 
 }  // namespace utils
