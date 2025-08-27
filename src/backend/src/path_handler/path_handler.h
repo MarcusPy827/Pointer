@@ -34,12 +34,19 @@ struct PathHandlerPathResult {
 
 class PathHandler {
  public:
+
+  PathHandlerPathResult FolderExists(std::string path);
+
+  PathHandlerPathResult FileExists(std::string path);
+
   PathHandlerPathResult GetConfigPath();
+
+  PathHandlerPathResult GetUserUUIDPath();
 
  private:
   const std::string_view kApplicationName = "marcus.pointer.app";
 
-  pointer::utils::Utils utils_helper_;
+  pointer::utils::Utils utils_helper_ = pointer::utils::Utils();
 };
 
 }  // namespace utils

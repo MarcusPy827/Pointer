@@ -16,7 +16,11 @@
  * NOTE: This software comes with ABSOLUTELY NO WARRANTY. Use at your own risk.
  */
 
+#define UUID_SYSTEM_GENERATOR
+
 #include <filesystem>
+#include <iostream>
+#include <fstream>
 
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
@@ -24,8 +28,113 @@
 
 #include "src/path_handler/path_handler.h"
 
+#include "3rdparty/nlohmann/json/json.h"
+#include "3rdparty/mariusbancila/stduuid/uuid.h"
+
 namespace pointer {
 namespace utils {
+
+PathHandlerPathResult PathHandler::FolderExists(std::string path) {
+  PathHandlerPathResult result;
+  std::string err_msg;
+  std::error_code err_code;
+
+  try {
+    if (std::filesystem::is_directory(path, err_code)) {
+      if (err_code) {
+        std::string err_msg = "❌ Failed to check directory. ";
+        absl::StrAppend(&err_msg, "An error occurred.\n");
+        absl::StrAppend(&err_msg, absl::StrFormat("Error code: %d.\n",
+          err_code.value()));
+        absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n",
+          err_code.message()));
+
+        LOG(ERROR) << err_msg;
+        result.err_msg = err_msg;
+        return result;
+      }
+
+      err_msg = absl::StrCat("🔍 The folder already exists.");
+      LOG(INFO) << err_msg;
+      result.result = true;
+      result.err_msg = err_msg;
+      return result;
+    } else {
+      err_msg = absl::StrCat("🔍 The folder does NOT exist.");
+      result.result = true;
+      result.err_msg = err_msg;
+      return result;
+    }
+  } catch (const std::filesystem::filesystem_error& e) {
+    err_msg = absl::StrCat(
+      "⛔ A filesystem error occurred during directory check. ",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    result.err_msg = err_msg;
+    return result;
+  } catch (const std::exception& e) {
+    err_msg = absl::StrCat(
+      "⛔ An exception occurred during directory check. ",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    result.err_msg = err_msg;
+    return result;
+  } catch (...) {
+    err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during directory check, aborting...");
+    result.err_msg = err_msg;
+    return result;
+  }
+}
+
+PathHandlerPathResult PathHandler::FileExists(std::string path) {
+  PathHandlerPathResult result;
+  std::string err_msg;
+  std::error_code err_code;
+
+  try {
+    if (std::filesystem::exists(path, err_code)) {
+      if (err_code) {
+        std::string err_msg = "❌ Failed to check directory. ";
+        absl::StrAppend(&err_msg, "An error occurred.\n");
+        absl::StrAppend(&err_msg, absl::StrFormat("Error code: %d.\n",
+          err_code.value()));
+        absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n",
+          err_code.message()));
+
+        LOG(ERROR) << err_msg;
+        result.err_msg = err_msg;
+        return result;
+      }
+
+      err_msg = absl::StrCat("🔍 The file already exists.");
+      LOG(INFO) << err_msg;
+      result.result = true;
+      result.err_msg = err_msg;
+      return result;
+    } else {
+      err_msg = absl::StrCat("🔍 The file does NOT exist.");
+      result.result = true;
+      result.err_msg = err_msg;
+      return result;
+    }
+  } catch (const std::filesystem::filesystem_error& e) {
+    err_msg = absl::StrCat(
+      "⛔ A filesystem error occurred during directory check. ",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    result.err_msg = err_msg;
+    return result;
+  } catch (const std::exception& e) {
+    err_msg = absl::StrCat(
+      "⛔ An exception occurred during directory check. ",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    result.err_msg = err_msg;
+    return result;
+  } catch (...) {
+    err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during directory check, aborting...");
+    result.err_msg = err_msg;
+    return result;
+  }
+}
 
 PathHandlerPathResult PathHandler::GetConfigPath() {
   PathHandlerPathResult result;
@@ -144,6 +253,76 @@ PathHandlerPathResult PathHandler::GetConfigPath() {
   }
 
   result.result = true;
+  return result;
+}
+
+PathHandlerPathResult PathHandler::GetUserUUIDPath() {
+  PathHandlerPathResult result;
+  pointer::utils::SystemType system_type = utils_helper_.GetSystemType();
+  std::string err_msg;
+  std::filesystem::path result_path;
+  std::error_code err_code;
+
+  auto config_path = GetConfigPath();
+  if (!config_path.result) {
+    return config_path;
+  }
+
+  try {
+    result.path = std::filesystem::path(result.path) / "user.json";
+    auto file_existance_test_result = FileExists(result.path);
+    if (!file_existance_test_result.result) {
+      std::string user_uuid = uuids::to_string(
+        uuids::uuid_system_generator {}());
+      nlohmann::json uuid_content;
+      uuid_content["user_uuid"] = user_uuid;
+      std::string file_content = uuid_content.dump(2);
+
+      LOG(INFO) << "❗ User uuid is NOT ready, now initializing it...";
+
+      std::ofstream file_stream(result.path, std::ios::out | std::ios::trunc);
+      if (!file_stream) {
+        err_msg = absl::StrFormat("⛔ Cannot open config file \"%s\".",
+          result.path);
+        LOG(ERROR) << err_msg;
+        result.err_msg = err_msg;
+        return result;
+      }
+
+      file_stream << file_content;
+      file_stream.close();
+      LOG(INFO) << "📄 Successfully created user UUID.";
+    }
+
+    file_existance_test_result = FileExists(result.path);
+    if (!file_existance_test_result.result) {
+      return file_existance_test_result;
+    }
+
+    result.result = true;
+    return result;
+  } catch (const std::filesystem::filesystem_error& e) {
+    err_msg = absl::StrCat(
+      "⛔ A filesystem error occurred during directory check. ",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    result.err_msg = err_msg;
+    return result;
+  } catch (const std::exception& e) {
+    err_msg = absl::StrCat(
+      "⛔ An exception occurred during directory check. ",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    result.err_msg = err_msg;
+    return result;
+  } catch (...) {
+    err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during directory check, aborting...");
+    result.err_msg = err_msg;
+    return result;
+  }
+
+  err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during directory check, aborting...");
+  result.err_msg = err_msg;
   return result;
 }
 

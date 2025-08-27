@@ -81,5 +81,8 @@
     "typeinfo": "cpp",
     "valarray": "cpp",
     "variant": "cpp"
-  }
+  },
+  "C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
+    "modernize-concat-nested-namespaces"
+  ]
 }

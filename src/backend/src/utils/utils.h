@@ -21,6 +21,14 @@
 
 #include <string>
 
+#include "src/path_handler/path_handler.h"
+
+struct GenericQueryResult {
+  bool query_result = false;
+  std::string err_msg;
+  std::string result;
+};
+
 namespace pointer {
 namespace utils {
 
@@ -33,6 +41,11 @@ enum class SystemType {
 class Utils {
  public:
   static SystemType GetSystemType();
+
+  GenericQueryResult GetUserUuid();
+
+ private:
+  PathHandler path_handler_helper_ = PathHandler();
 };
 
 }  // namespace utils
