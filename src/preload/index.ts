@@ -14,7 +14,11 @@ const api = {
 
   // API: Check if directory exists
   checkIfDirectoryExistsFunc: (path: string, create_mode: boolean): Promise<DirectoryExistResult> =>
-    ipcRenderer.invoke('checkIfDirectoryExistsAPI', path, create_mode)
+    ipcRenderer.invoke('checkIfDirectoryExistsAPI', path, create_mode),
+
+  // API: Create workspace
+  createWorkspaceFunc: (path: string, name: string): Promise<DirectoryExistResult> =>
+    ipcRenderer.invoke('createWorkspaceAPI', path, name)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

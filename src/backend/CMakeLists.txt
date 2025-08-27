@@ -16,8 +16,6 @@ find_package(GTest CONFIG REQUIRED)
 add_library(pointer STATIC
   src/file_handler/file_handler.h
   src/file_handler/file_handler.cc
-  src/path_handler/path_handler.h
-  src/path_handler/path_handler.cc
   src/utils/utils.h
   src/utils/utils.cc
 )
