@@ -35,7 +35,7 @@ PathHandlerPathResult PathHandler::GetConfigPath() {
   std::error_code err_code;
 
   switch (system_type) {
-    case pointer::utils::SystemType::kWindows:
+    case pointer::utils::SystemType::kWindows: {
       const char* app_data_path = std::getenv("APPDATA");
       if (!app_data_path) {
         err_msg = absl::StrCat("⛔ Could not find path of \"AppData\".");
@@ -45,35 +45,39 @@ PathHandlerPathResult PathHandler::GetConfigPath() {
         parent_folder = std::filesystem::path(app_data_path);
       }
       break;
+    }
 
-    case pointer::utils::SystemType::kMacOS:
+    case pointer::utils::SystemType::kMacOS: {
       const char* home_path = std::getenv("HOME");
       if (!home_path) {
         err_msg = absl::StrCat("⛔ Could not find path of \"Home\".");
         result.err_msg = err_msg;
         return result;
       } else {
-        parent_folder = std::filesystem::path(app_data_path) / "Library" /
+        parent_folder = std::filesystem::path(home_path) / "Library" /
           "Application Support";
       }
       break;
+    }
 
-    case pointer::utils::SystemType::kUnixLike:
+    case pointer::utils::SystemType::kUnixLike: {
       const char* xdg_home_path = std::getenv("XDG_CONFIG_HOME");
       if (!xdg_home_path) {
         err_msg = absl::StrCat("⛔ Could not find path of \"Home\".");
         result.err_msg = err_msg;
         return result;
       } else {
-        parent_folder = std::filesystem::path(app_data_path) / ".config";
+        parent_folder = std::filesystem::path(xdg_home_path) / ".config";
       }
       break;
+    }
 
-    default:
+    default: {
       err_msg = absl::StrCat("⛔ Could not find application config path.");
       result.err_msg = err_msg;
       return result;
       break;
+    }
   }
 
   result.path = parent_folder / kApplicationName;
