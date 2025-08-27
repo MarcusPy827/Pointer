@@ -39,14 +39,23 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
       return
     }
 
-    const isFolderExist = await window.api.checkIfDirectoryExistsFunc(workspacePath, true)
-    if (!isFolderExist) {
+    const isFolderExist = await window.api.createWorkspaceFunc(workspacePath, workspaceName)
+    if (!isFolderExist.result) {
       setWorkspaceCreationDialogLoading(false)
       messageApi.open({
         type: 'error',
-        content: t('err_empty_workspace_path')
+        content: t('err_log_in_console')
       })
+
+      console.error(isFolderExist.result_msg)
       return
+    } else {
+      setWorkspaceCreationDialogLoading(false)
+      setIsWorkspaceCreationDialogOpened(false)
+      messageApi.open({
+        type: 'success',
+        content: t('ok_workspace_created')
+      })
     }
   }
 

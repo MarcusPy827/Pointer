@@ -13,5 +13,7 @@
   "browse_action": "Browse",
   "cancelled_message": "Cancelled.",
   "err_empty_workspace_name": "The workspace name is empty, please specify one.",
-  "err_empty_workspace_path": "The workspace path is empty, please specify one."
+  "err_empty_workspace_path": "The workspace path is empty, please specify one.",
+  "err_log_in_console": "An error has occurred, please check the console for log output...",
+  "ok_workspace_created": "Successfully created your workspace!"
 }

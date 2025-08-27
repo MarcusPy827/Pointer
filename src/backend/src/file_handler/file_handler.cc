@@ -20,7 +20,6 @@
 #include <filesystem>
 #include <fstream>
 
-#include "absl/log/log.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
 
@@ -45,19 +44,17 @@ FileHandlerResult FileHandler::FolderExists(std::string path) {
         absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n",
           err_code.message()));
 
-        LOG(ERROR) << err_msg;
         result.msg = err_msg;
         return result;
       }
 
       err_msg = absl::StrCat("🔍 The folder already exists.");
-      LOG(INFO) << err_msg;
       result.result = true;
       result.msg = err_msg;
       return result;
     } else {
       err_msg = absl::StrCat("🔍 The folder does NOT exist.");
-      result.result = true;
+      result.result = false;
       result.msg = err_msg;
       return result;
     }
@@ -81,6 +78,11 @@ FileHandlerResult FileHandler::FolderExists(std::string path) {
     result.msg = err_msg;
     return result;
   }
+
+  err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during directory check, aborting...");
+  result.msg = err_msg;
+  return result;
 }
 
 FileHandlerResult FileHandler::FileExists(std::string path) {
@@ -89,7 +91,7 @@ FileHandlerResult FileHandler::FileExists(std::string path) {
   std::error_code err_code;
 
   try {
-    if (std::filesystem::exists(path, err_code)) {
+    if (std::filesystem::is_regular_file(path, err_code)) {
       if (err_code) {
         std::string err_msg = "❌ Failed to check directory. ";
         absl::StrAppend(&err_msg, "An error occurred.\n");
@@ -98,19 +100,17 @@ FileHandlerResult FileHandler::FileExists(std::string path) {
         absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n",
           err_code.message()));
 
-        LOG(ERROR) << err_msg;
         result.msg = err_msg;
         return result;
       }
 
       err_msg = absl::StrCat("🔍 The file already exists.");
-      LOG(INFO) << err_msg;
       result.result = true;
       result.msg = err_msg;
       return result;
     } else {
       err_msg = absl::StrCat("🔍 The file does NOT exist.");
-      result.result = true;
+      result.result = false;
       result.msg = err_msg;
       return result;
     }
@@ -134,6 +134,11 @@ FileHandlerResult FileHandler::FileExists(std::string path) {
     result.msg = err_msg;
     return result;
   }
+
+  err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during directory check, aborting...");
+  result.msg = err_msg;
+  return result;
 }
 
 FileHandlerResult FileHandler::CheckIsDirectoryExists(std::string path,
@@ -143,7 +148,6 @@ FileHandlerResult FileHandler::CheckIsDirectoryExists(std::string path,
   if (path.empty()) {
     std::string err_msg =
       "❌ No path is specified, could NOT check if the folder exists";
-    LOG(ERROR) << err_msg;
     result.msg = err_msg;
     return result;
   }
@@ -160,7 +164,6 @@ FileHandlerResult FileHandler::CheckIsDirectoryExists(std::string path,
       absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n",
         err_code.message()));
 
-      LOG(ERROR) << err_msg;
       result.msg = err_msg;
       return result;
     }
@@ -170,7 +173,6 @@ FileHandlerResult FileHandler::CheckIsDirectoryExists(std::string path,
       absl::StrAppend(&result_msg, "There is no need to create it.");
     }
 
-    LOG(INFO) << result_msg;
     result.result = true;
     result.msg = result_msg;
     return result;
@@ -179,19 +181,15 @@ FileHandlerResult FileHandler::CheckIsDirectoryExists(std::string path,
   if (std::filesystem::exists(path, err_code)) {
     std::string err_msg =
       "❌ The path given is a file, and it is NOT directory.";
-    LOG(ERROR) << err_msg;
     result.msg = err_msg;
     return result;
   }
 
   if (!create_mode) {
     std::string err_msg = "❌ The given directory does NOT exist.";
-    LOG(ERROR) << err_msg;
     result.msg = err_msg;
     return result;
   }
-
-  LOG(INFO) << "The given directory does NOT exist, now trying to create it...";
 
   if (!std::filesystem::create_directories(path, err_code)) {
     if (err_code) {
@@ -202,7 +200,6 @@ FileHandlerResult FileHandler::CheckIsDirectoryExists(std::string path,
       absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n",
         err_code.message()));
 
-      LOG(ERROR) << err_msg;
       result.msg = err_msg;
       return result;
     }
@@ -210,7 +207,6 @@ FileHandlerResult FileHandler::CheckIsDirectoryExists(std::string path,
 
   std::string result_msg = absl::StrFormat(
       "📂 Successfully created the directory \"%s\".", path);
-  LOG(INFO) << result_msg;
   result.result = true;
   result.msg = result_msg;
   return result;
@@ -266,6 +262,11 @@ FileHandlerResult FileHandler::CheckIsDirectoryEmpty(std::string path,
     result.msg = err_msg;
     return result;
   }
+
+  err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during directory check, aborting...");
+  result.msg = err_msg;
+  return result;
 }
 
 FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
@@ -301,6 +302,12 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
 
       result.msg = err_msg;
       return result;
+    }
+
+    auto workspace_folder_create = CheckIsDirectoryExists(
+      kWorkspaceDataPath, true);
+    if (!workspace_folder_create.result) {
+      return workspace_folder_create;
     }
 
     auto workspace_data_file_existence_test_result = FileExists(
@@ -340,7 +347,7 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
       { "min_compactable_version", utils_helper_.GetBackendVersionString() }
     };
 
-    std::ofstream config_stream("pretty.json");
+    std::ofstream config_stream(kWorkspaceConfigFilePath);
     config_stream << std::setw(2) << json_gen << std::endl;
     config_stream.close();
 
@@ -364,6 +371,10 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
     result.msg = err_msg;
     return result;
   }
+  err_msg = absl::StrCat(
+    "⛔ An unknown error occurred during directory check, aborting...");
+  result.msg = err_msg;
+  return result;
 }
 
 }  // namespace core

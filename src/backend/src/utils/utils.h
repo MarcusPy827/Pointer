@@ -21,8 +21,6 @@
 
 #include <string>
 
-#include "src/path_handler/path_handler.h"
-
 namespace pointer {
 namespace utils {
 
@@ -78,8 +76,6 @@ class Utils {
   double compactable_with_min_backend_version_ = 1.0;
 
   const std::string_view kApplicationName = "marcus.pointer.app";
-
-  PathHandler path_handler_helper_ = PathHandler();
 };
 
 }  // namespace utils

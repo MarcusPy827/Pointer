@@ -146,3 +146,20 @@ ipcMain.handle(
     return mapped_result
   }
 )
+
+// IPC: Create workspace
+ipcMain.handle(
+  'createWorkspaceAPI',
+  async (
+    _event: IpcMainInvokeEvent,
+    path: string,
+    create_mode: boolean
+  ): Promise<DirectoryExistResult> => {
+    const result = backend.createWorkspace(path, create_mode)
+    const mapped_result: DirectoryExistResult = {
+      result: result.result,
+      result_msg: result.msg
+    }
+    return mapped_result
+  }
+)

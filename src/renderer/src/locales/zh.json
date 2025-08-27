@@ -13,5 +13,7 @@
   "browse_action": "浏览",
   "cancelled_message": "已取消",
   "err_empty_workspace_name": "工作区名称为空，请指定一个",
-  "err_empty_workspace_path": "工作区路径为空，请指定一个"
+  "err_empty_workspace_path": "工作区路径为空，请指定一个",
+  "err_log_in_console": "发生错误，请打开控制台查看",
+  "ok_workspace_created": "已成功创建工作区"
 }
