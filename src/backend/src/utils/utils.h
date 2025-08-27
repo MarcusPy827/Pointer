@@ -16,35 +16,26 @@
  * NOTE: This software comes with ABSOLUTELY NO WARRANTY. Use at your own risk.
  */
 
-#ifndef SRC_BACKEND_SRC_FILE_HANDLER_FILE_HANDLER_H_
-#define SRC_BACKEND_SRC_FILE_HANDLER_FILE_HANDLER_H_
+#ifndef SRC_BACKEND_SRC_UTILS_UTILS_H_
+#define SRC_BACKEND_SRC_UTILS_UTILS_H_
 
 #include <string>
 
 namespace pointer {
-namespace core {
+namespace utils {
 
-struct FileHandlerResult {
-  bool result = false;
-  std::string msg;
+enum class SystemType {
+  kWindows,
+  kMacOS,
+  kUnixLike
 };
 
-class FileHandler {
- private:
-  FileHandlerResult FolderExists(std::string path);
-
-  FileHandlerResult FileExists(std::string path);
-
+class Utils {
  public:
-  FileHandlerResult CheckIsDirectoryExists(std::string path, bool create_mode);
-
-  FileHandlerResult CheckIsDirectoryEmpty(std::string path,
-    bool ignore_hidden_files, bool create_mode);
-
-  FileHandlerResult CreateWorkSpace(std::string path, std::string name);
+  static SystemType GetSystemType();
 };
 
-}  // namespace core
+}  // namespace utils
 }  // namespace pointer
 
-#endif  // SRC_BACKEND_SRC_FILE_HANDLER_FILE_HANDLER_H_
+#endif  // SRC_BACKEND_SRC_UTILS_UTILS_H_

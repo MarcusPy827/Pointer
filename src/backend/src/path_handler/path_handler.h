@@ -16,35 +16,33 @@
  * NOTE: This software comes with ABSOLUTELY NO WARRANTY. Use at your own risk.
  */
 
-#ifndef SRC_BACKEND_SRC_FILE_HANDLER_FILE_HANDLER_H_
-#define SRC_BACKEND_SRC_FILE_HANDLER_FILE_HANDLER_H_
+#ifndef SRC_BACKEND_SRC_PATH_HANDLER_PATH_HANDLER_H_
+#define SRC_BACKEND_SRC_PATH_HANDLER_PATH_HANDLER_H_
 
 #include <string>
 
+#include "src/utils/utils.h"
+
 namespace pointer {
-namespace core {
+namespace utils {
 
-struct FileHandlerResult {
+struct PathHandlerPathResult {
   bool result = false;
-  std::string msg;
+  std::string err_msg;
+  std::string path;
 };
 
-class FileHandler {
- private:
-  FileHandlerResult FolderExists(std::string path);
-
-  FileHandlerResult FileExists(std::string path);
-
+class PathHandler {
  public:
-  FileHandlerResult CheckIsDirectoryExists(std::string path, bool create_mode);
+  PathHandlerPathResult GetConfigPath();
 
-  FileHandlerResult CheckIsDirectoryEmpty(std::string path,
-    bool ignore_hidden_files, bool create_mode);
+ private:
+  const std::string_view kApplicationName = "marcus.pointer.app";
 
-  FileHandlerResult CreateWorkSpace(std::string path, std::string name);
+  pointer::utils::Utils utils_helper_;
 };
 
-}  // namespace core
+}  // namespace utils
 }  // namespace pointer
 
-#endif  // SRC_BACKEND_SRC_FILE_HANDLER_FILE_HANDLER_H_
+#endif  // SRC_BACKEND_SRC_PATH_HANDLER_PATH_HANDLER_H_

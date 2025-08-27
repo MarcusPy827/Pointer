@@ -22,10 +22,118 @@
 #include "absl/log/log.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
+
 #include "src/file_handler/file_handler.h"
+#include "3rdparty/nlohmann/json/json.h"
 
 namespace pointer {
 namespace core {
+
+FileHandlerResult FileHandler::FolderExists(std::string path) {
+  FileHandlerResult result;
+  std::string err_msg;
+  std::error_code err_code;
+
+  try {
+    if (std::filesystem::is_directory(path, err_code)) {
+      if (err_code) {
+        std::string err_msg = "❌ Failed to check directory. ";
+        absl::StrAppend(&err_msg, "An error occurred.\n");
+        absl::StrAppend(&err_msg, absl::StrFormat("Error code: %d.\n",
+          err_code.value()));
+        absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n",
+          err_code.message()));
+
+        LOG(ERROR) << err_msg;
+        result.msg = err_msg;
+        return result;
+      }
+
+      err_msg = absl::StrCat("🔍 The folder already exists.");
+      LOG(INFO) << err_msg;
+      result.result = true;
+      result.msg = err_msg;
+      return result;
+    } else {
+      err_msg = absl::StrCat("🔍 The folder does NOT exist.");
+      result.result = true;
+      result.msg = err_msg;
+      return result;
+    }
+  } catch (const std::filesystem::filesystem_error& e) {
+    err_msg = absl::StrFormat(
+      "⛔ A filesystem error occurred during directory check. "
+      "The backend returned: %s",
+      e.what());
+    result.msg = err_msg;
+    return result;
+  } catch (const std::exception& e) {
+    err_msg = absl::StrFormat(
+      "⛔ An exception occurred during directory check. "
+      "The backend returned: %s",
+      e.what());
+    result.msg = err_msg;
+    return result;
+  } catch (...) {
+    err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during directory check, aborting...");
+    result.msg = err_msg;
+    return result;
+  }
+}
+
+FileHandlerResult FileHandler::FileExists(std::string path) {
+  FileHandlerResult result;
+  std::string err_msg;
+  std::error_code err_code;
+
+  try {
+    if (std::filesystem::exists(path, err_code)) {
+      if (err_code) {
+        std::string err_msg = "❌ Failed to check directory. ";
+        absl::StrAppend(&err_msg, "An error occurred.\n");
+        absl::StrAppend(&err_msg, absl::StrFormat("Error code: %d.\n",
+          err_code.value()));
+        absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n",
+          err_code.message()));
+
+        LOG(ERROR) << err_msg;
+        result.msg = err_msg;
+        return result;
+      }
+
+      err_msg = absl::StrCat("🔍 The file already exists.");
+      LOG(INFO) << err_msg;
+      result.result = true;
+      result.msg = err_msg;
+      return result;
+    } else {
+      err_msg = absl::StrCat("🔍 The file does NOT exist.");
+      result.result = true;
+      result.msg = err_msg;
+      return result;
+    }
+  } catch (const std::filesystem::filesystem_error& e) {
+    err_msg = absl::StrFormat(
+      "⛔ A filesystem error occurred during directory check. "
+      "The backend returned: %s",
+      e.what());
+    result.msg = err_msg;
+    return result;
+  } catch (const std::exception& e) {
+    err_msg = absl::StrFormat(
+      "⛔ An exception occurred during directory check. "
+      "The backend returned: %s",
+      e.what());
+    result.msg = err_msg;
+    return result;
+  } catch (...) {
+    err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during directory check, aborting...");
+    result.msg = err_msg;
+    return result;
+  }
+}
 
 FileHandlerResult FileHandler::CheckIsDirectoryExists(std::string path,
     bool create_mode) {
@@ -162,6 +270,62 @@ FileHandlerResult FileHandler::CheckIsDirectoryEmpty(std::string path,
       "⛔ An unknown error occurred during directory check, aborting...");
     result.msg = err_msg;
     return result;
+  }
+}
+
+FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
+    std::string name) {
+  FileHandlerResult result;
+  std::string err_msg;
+  std::error_code err_code;
+
+  const std::filesystem::path kWorkspaceFolderPath = path;
+  const std::filesystem::path kDataFolderPath = ".pointer";
+  const std::filesystem::path kWorkspaceDataPath = kWorkspaceFolderPath /
+    kDataFolderPath;
+  const std::filesystem::path kWorkspaceConfigFileName = "config.json";
+  const std::filesystem::path kWorkspaceConfigFilePath = kWorkspaceDataPath /
+    kWorkspaceConfigFileName;
+
+  try {
+    auto directory_empty_test_result = CheckIsDirectoryEmpty(path, true, true);
+    if (!directory_empty_test_result.result) {
+      return directory_empty_test_result;
+    }
+
+    auto workspace_data_path_existence_test_result = FolderExists(
+      kWorkspaceDataPath);
+    if (workspace_data_path_existence_test_result.result) {
+      if (workspace_data_path_existence_test_result.msg ==
+          "🔍 The folder already exists.") {
+        err_msg = "❌ Workspace data folder already exists, make sure that you "
+          "are using an empty folder.";
+      } else {
+        err_msg = workspace_data_path_existence_test_result.msg;
+      }
+
+      result.msg = err_msg;
+      return result;
+    }
+
+    auto workspace_data_file_existence_test_result = FileExists(
+      kWorkspaceConfigFilePath);
+    if (workspace_data_file_existence_test_result.result) {
+      if (workspace_data_file_existence_test_result.msg ==
+          "🔍 The file already exists.") {
+        err_msg = "❌ Workspace config file already exists, make sure that you "
+          "are using an empty folder.";
+      } else {
+        err_msg = workspace_data_file_existence_test_result.msg;
+      }
+
+      result.msg = err_msg;
+      return result;
+    }
+
+    // nlohmann::json json_gen
+  } catch(...) {
+
   }
 }
 
