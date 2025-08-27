@@ -19,6 +19,8 @@
 #include <filesystem>
 
 #include "absl/strings/str_cat.h"
+#include "absl/strings/str_format.h"
+#include "absl/log/log.h"
 
 #include "src/path_handler/path_handler.h"
 
@@ -30,6 +32,7 @@ PathHandlerPathResult PathHandler::GetConfigPath() {
   pointer::utils::SystemType system_type = utils_helper_.GetSystemType();
   std::string err_msg;
   std::filesystem::path parent_folder;
+  std::error_code err_code;
 
   switch (system_type) {
     case pointer::utils::SystemType::kWindows:
@@ -73,8 +76,70 @@ PathHandlerPathResult PathHandler::GetConfigPath() {
       break;
   }
 
-  result.result = true;
   result.path = parent_folder / kApplicationName;
+
+  if (!std::filesystem::is_directory(result.path, err_code)) {
+    if (err_code) {
+      err_msg = absl::StrFormat(
+        "❌ Failed to check directory \"%s\". ", result.path);
+      absl::StrAppend(&err_msg, "An error occurred.\n  ");
+      absl::StrAppend(&err_msg, absl::StrFormat("Error code: %d.\n  ",
+        err_code.value()));
+      absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n  ",
+        err_code.message()));
+
+      LOG(ERROR) << err_msg;
+      result.err_msg = err_msg;
+      return result;
+    }
+
+    LOG(INFO) << "❗ The application config path does NOT exist, "
+      "now creating it...";
+
+    if (std::filesystem::create_directories(result.path, err_code)) {
+      if (err_code) {
+        err_msg = absl::StrFormat(
+        "❌ Failed to create directory \"%s\". ", result.path);
+        absl::StrAppend(&err_msg, "An error occurred.\n  ");
+        absl::StrAppend(&err_msg, absl::StrFormat("Error code: %d.\n  ",
+          err_code.value()));
+        absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n",
+          err_code.message()));
+
+        LOG(ERROR) << err_msg;
+        result.err_msg = err_msg;
+        return result;
+      }
+
+      std::string result_msg = absl::StrFormat(
+        "📂 Successfully created the directory \"%s\".", result.path);
+      LOG(INFO) << result_msg;
+    }
+  }
+
+  if (!std::filesystem::is_directory(result.path, err_code)) {
+    if (err_code) {
+      err_msg = absl::StrFormat(
+        "❌ Failed to check directory \"%s\". ", result.path);
+      absl::StrAppend(&err_msg, "An error occurred.\n  ");
+      absl::StrAppend(&err_msg, absl::StrFormat("Error code: %d.\n  ",
+        err_code.value()));
+      absl::StrAppend(&err_msg, absl::StrFormat("Error message: %s.\n  ",
+        err_code.message()));
+
+      LOG(ERROR) << err_msg;
+      result.err_msg = err_msg;
+      return result;
+    }
+
+    err_msg = absl::StrFormat(
+      "❌ Failed to create directory \"%s\". ", result.path);
+    LOG(ERROR) << err_msg;
+    result.err_msg = err_msg;
+    return result;
+  }
+
+  result.result = true;
   return result;
 }
 
