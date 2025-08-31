@@ -108,6 +108,13 @@ std::string Utils::GetCurrentUtcTime() {
   return result;
 }
 
+int64_t Utils::GetCurrentTimestamp() {
+  time_t current_timestamp;
+  time(&current_timestamp);
+  int64_t result = static_cast<int64_t>(current_timestamp);
+  return result;
+}
+
 std::string Utils::GetBackendVersionString() {
   return backend_version_string_;
 }

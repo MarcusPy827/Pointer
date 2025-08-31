@@ -19,6 +19,7 @@
 #include <string>
 #include <filesystem>
 #include <fstream>
+#include <vector>
 
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
@@ -332,19 +333,22 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
     }
 
     nlohmann::json json_gen;
+    json_gen["name"] = name;
+
     json_gen["owners"] = {
       { "owner", owner_id.result },
       { "shared_with", {} }
     };
 
     json_gen["time"] = {
-      { "created_at", utils_helper_.GetCurrentUtcTime() },
-      { "config_updated_at", utils_helper_.GetCurrentUtcTime() }
+      { "created_at", utils_helper_.GetCurrentTimestamp() },
+      { "config_updated_at", utils_helper_.GetCurrentTimestamp() }
     };
 
     json_gen["versions"] = {
-      { "created_version", utils_helper_.GetBackendVersionString() },
-      { "min_compactable_version", utils_helper_.GetBackendVersionString() }
+      { "created_version", utils_helper_.GetBackendVersion() },
+      { "min_compactable_version", utils_helper_
+          .GetCompactableWithMinBackendVersion() }
     };
 
     std::ofstream config_stream(kWorkspaceConfigFilePath);

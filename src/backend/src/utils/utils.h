@@ -20,6 +20,7 @@
 #define SRC_BACKEND_SRC_UTILS_UTILS_H_
 
 #include <string>
+#include <vector>
 
 namespace pointer {
 namespace utils {
@@ -49,6 +50,8 @@ class Utils {
   GenericQueryResult GetUserUuid();
 
   static std::string GetCurrentUtcTime();
+
+  static int64_t GetCurrentTimestamp();
 
   std::string GetBackendVersionString();
 
