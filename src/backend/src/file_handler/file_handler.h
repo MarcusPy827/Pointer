@@ -20,6 +20,7 @@
 #define SRC_BACKEND_SRC_FILE_HANDLER_FILE_HANDLER_H_
 
 #include <string>
+#include <vector>
 
 #include "src/utils/utils.h"
 
@@ -28,7 +29,20 @@ namespace core {
 
 struct FileHandlerResult {
   bool result = false;
+  int err_code;
   std::string msg;
+};
+
+struct WorkspaceInfoQueryPayload {
+  bool query_state = false;
+  std::string err_msg;
+  std::string name;
+  std::string owner;
+  std::vector<std::string> shared_with;
+  int64_t config_updated;
+  int64_t created_at;
+  double version;
+  double min_compactable_version;
 };
 
 class FileHandler {
