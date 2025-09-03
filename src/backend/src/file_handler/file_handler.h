@@ -36,6 +36,7 @@ struct FileHandlerResult {
 struct WorkspaceInfoQueryPayload {
   bool query_state = false;
   std::string err_msg;
+  int err_code;
   std::string name;
   std::string owner;
   std::vector<std::string> shared_with;
@@ -53,6 +54,8 @@ class FileHandler {
     bool ignore_hidden_files, bool create_mode);
 
   FileHandlerResult CreateWorkSpace(std::string path, std::string name);
+
+  WorkspaceInfoQueryPayload OpenWorkSpace(std::string path);
 
  private:
   FileHandlerResult FolderExists(std::string path);
