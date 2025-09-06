@@ -109,30 +109,7 @@ You will need these two libraries in your environment path that CMake and gyp co
 **Notice**: The headers of `nlohmann/json` and `mariusbancila/stduuid` is included in this repository, you don't need to clone & install them.
 
 ### Installation
-#### Backend
-```Shell
-npm run backend:clean
-npm run backend:configure
-npm run backend:build
-```
-
-#### Frontend
-For debugging purpose:
-```Shell
-npm run dev
-```
-For building:
-```Shell
-npm build:<platform>
-```
-
-...while `<platform>` is simply the platform that you are compling, for example:
-
-```Shell
-npm build:linux
-```
-
-Take Ubuntu as an example, after running the command you may gey four versions:  linux unpacked, AppImage, .deb, snap.
+To build this program, you may refer the [wiki](https://jihulab.com/MarcusPy827/Pointer/-/wikis/en/Compile-Guide) here.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -140,9 +117,7 @@ Take Ubuntu as an example, after running the command you may gey four versions: 
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-(WIP)
-
-Please refer to the `docs` folder for usage guide.
+The documentation is hosted on the project's main repository [wiki](https://jihulab.com/MarcusPy827/Pointer/-/wikis/).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

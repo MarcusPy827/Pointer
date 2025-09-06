@@ -1,11 +1,17 @@
 {
-  "variables": {
-    "absl_includedir": "/usr/local/include",
-    "absl_libdir": "/usr/local/lib"
-  },
+  "includes": ["deps.gypi"], 
   "targets": [
     {
       "target_name": "pointer_core",
+      "conditions": [
+        ['OS=="win"', {
+          "msvs_settings": {
+            "VCCLCompilerTool": {
+              "AdditionalOptions": [ "/utf-8", "/EHsc" ]
+            }
+          }
+        }]
+      ],
       "sources": [
         "./src/backend/src/plugin/plugin.cc",
         "./src/backend/src/file_handler/file_handler.h",
@@ -53,6 +59,41 @@
             "-luuid"
           ],
           "ldflags": ["-Wl,--no-as-needed"]
+        }], 
+
+        ["OS == 'win'", {
+          "defines": [
+            "_HAS_EXCEPTIONS=1"
+          ],
+
+          "msvs_settings": {
+            "VCCLCompilerTool": {
+              "ExceptionHandling": 1
+            }
+          },
+
+          "libraries": [
+            "<(absl_libdir)/absl_str_format_internal.lib",
+            "<(absl_libdir)/absl_strings.lib",
+            "<(absl_libdir)/absl_base.lib",
+            "<(absl_libdir)/absl_raw_logging_internal.lib",
+            "<(absl_libdir)/absl_spinlock_wait.lib",
+            "<(absl_libdir)/absl_log_severity.lib",
+            "<(absl_libdir)/absl_log_internal_message.lib",
+            "<(absl_libdir)/absl_cord.lib",
+            "<(absl_libdir)/absl_symbolize.lib",
+            "<(absl_libdir)/absl_demangle_internal.lib",
+            "<(absl_libdir)/absl_debugging_internal.lib",
+            "<(absl_libdir)/absl_malloc_internal.lib",
+            "<(absl_libdir)/absl_examine_stack.lib",
+            "<(absl_libdir)/absl_failure_signal_handler.lib",
+            "<(absl_libdir)/absl_log_internal_check_op.lib",
+            "<(absl_libdir)/absl_log_internal_format.lib",
+            "<(absl_libdir)/absl_log_internal_globals.lib",
+            "<(absl_libdir)\\absl_int128.lib",
+            "<(absl_libdir)\\absl_strings_internal.lib",
+            "Rpcrt4.lib"
+          ]
         }]
       ]
     }

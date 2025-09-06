@@ -286,7 +286,8 @@ PathHandlerPathResult Utils::GetConfigPath() {
     }
   }
 
-  result.path = parent_folder / kApplicationName;
+  std::filesystem::path result_gen = parent_folder / kApplicationName;
+  result.path = result_gen.string();
 
   if (!std::filesystem::is_directory(result.path, err_code)) {
     if (err_code) {
@@ -358,7 +359,7 @@ PathHandlerPathResult Utils::GetUserUUIDPath() {
 
   try {
     result_path = std::filesystem::path(config_path.path) / "user.json";
-    auto file_existance_test_result = FileExists(result_path);
+    auto file_existance_test_result = FileExists(result_path.string());
     if (!file_existance_test_result.result) {
       std::string user_uuid = uuids::to_string(
         uuids::uuid_system_generator {}());
@@ -380,13 +381,13 @@ PathHandlerPathResult Utils::GetUserUUIDPath() {
       file_stream.close();
     }
 
-    file_existance_test_result = FileExists(result_path);
+    file_existance_test_result = FileExists(result_path.string());
     if (!file_existance_test_result.result) {
       return file_existance_test_result;
     }
 
     result.result = true;
-    result.path = result_path;
+    result.path = result_path.string();
     return result;
   } catch (const std::filesystem::filesystem_error& e) {
     err_msg = absl::StrCat(

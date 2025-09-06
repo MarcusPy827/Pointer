@@ -1,5 +1,5 @@
 import {JSX, Context, useState, useEffect, useCallback, createContext, useMemo, useContext} from "react"
-import {ConfigProvider, Splitter, theme} from "antd"
+import {ConfigProvider, theme} from "antd"
 import TitleBar from "./components/TitleBar"
 import ToolBar from "./components/ToolBar"
 import MyLibrary from "./pages/MyLibrary"

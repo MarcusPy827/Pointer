@@ -8,7 +8,7 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cmake.sourceDirectory": "/home/yue/Documents/Repositories/Public/Pointer/src/backend",
+  "cmake.sourceDirectory": "D:/Repositories/Public/Pointer/src/backend",
   "C_Cpp.errorSquiggles": "enabled",
   "files.associations": {
     "any": "cpp",
@@ -80,7 +80,26 @@
     "thread": "cpp",
     "typeinfo": "cpp",
     "valarray": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "filesystem": "cpp",
+    "ios": "cpp",
+    "locale": "cpp",
+    "xfacet": "cpp",
+    "xhash": "cpp",
+    "xiosbase": "cpp",
+    "xlocale": "cpp",
+    "xlocbuf": "cpp",
+    "xlocinfo": "cpp",
+    "xlocmes": "cpp",
+    "xlocmon": "cpp",
+    "xlocnum": "cpp",
+    "xloctime": "cpp",
+    "xmemory": "cpp",
+    "xstddef": "cpp",
+    "xstring": "cpp",
+    "xtr1common": "cpp",
+    "xtree": "cpp",
+    "xutility": "cpp"
   },
   "C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
     "modernize-concat-nested-namespaces"

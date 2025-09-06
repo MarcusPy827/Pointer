@@ -291,7 +291,7 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
     }
 
     auto workspace_data_path_existence_test_result = FolderExists(
-      kWorkspaceDataPath);
+      kWorkspaceDataPath.string());
     if (workspace_data_path_existence_test_result.result) {
       if (workspace_data_path_existence_test_result.msg ==
           "🔍 The folder already exists.") {
@@ -306,13 +306,13 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
     }
 
     auto workspace_folder_create = CheckIsDirectoryExists(
-      kWorkspaceDataPath, true);
+      kWorkspaceDataPath.string(), true);
     if (!workspace_folder_create.result) {
       return workspace_folder_create;
     }
 
     auto workspace_data_file_existence_test_result = FileExists(
-      kWorkspaceConfigFilePath);
+      kWorkspaceConfigFilePath.string());
     if (workspace_data_file_existence_test_result.result) {
       if (workspace_data_file_existence_test_result.msg ==
           "🔍 The file already exists.") {
@@ -378,82 +378,6 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
   err_msg = absl::StrCat(
     "⛔ An unknown error occurred during directory check, aborting...");
   result.msg = err_msg;
-  return result;
-}
-
-WorkspaceInfoQueryPayload FileHandler::OpenWorkSpace(std::string path) {
-  WorkspaceInfoQueryPayload result;
-  if (path.empty()) {
-    result.err_code = 1;
-    result.err_msg = absl::StrCat("Workspace path is empty");
-    return result;
-  }
-
-  const std::filesystem::path kWorkspaceFolderPath = path;
-  const std::filesystem::path kDataFolderPath = ".pointer";
-  const std::filesystem::path kWorkspaceDataPath = kWorkspaceFolderPath /
-    kDataFolderPath;
-  const std::filesystem::path kWorkspaceConfigFileName = "config.json";
-  const std::filesystem::path kWorkspaceConfigFilePath = kWorkspaceDataPath /
-    kWorkspaceConfigFileName;
-
-  try {
-    auto directory_empty_test_result = CheckIsDirectoryEmpty(path, false,
-      false);
-    if (directory_empty_test_result.result) {
-      result.err_code = 2;
-      result.err_msg = absl::StrCat("📁 The workspace is empty, aborting...");
-      return result;
-    } else if (directory_empty_test_result.msg !=
-        "❌ The directory is NOT empty!!") {
-      result.err_code = -1;
-      result.err_msg = directory_empty_test_result.msg;
-      return result;
-    }
-
-    auto workspace_data_path_existence_test_result = FolderExists(
-      kWorkspaceDataPath);
-    if (!workspace_data_path_existence_test_result.result) {
-      if (workspace_data_path_existence_test_result.msg ==
-          "🔍 The folder does NOT exist.") {
-        result.err_code = 3;
-        result.err_msg = "📃 Workspace config folder does NOT exist!!";
-      } else {
-        result.err_code = -1;
-        result.err_msg = workspace_data_path_existence_test_result.msg;
-      }
-      return result;
-    }
-
-    auto workspace_config_file_exsistance_test = FileExists(
-      kWorkspaceConfigFilePath);
-
-  } catch (const std::filesystem::filesystem_error& e) {
-    std::string err_msg = absl::StrCat(
-      "⛔ A filesystem error occurred during directory check. ",
-      absl::StrFormat("The backend returned: %s", e.what()));
-    result.err_code = -1;
-    result.err_msg = err_msg;
-    return result;
-  } catch (const std::exception& e) {
-    std::string err_msg = absl::StrCat(
-      "⛔ An exception occurred during directory check. ",
-      absl::StrFormat("The backend returned: %s", e.what()));
-    result.err_code = -1;
-    result.err_msg = err_msg;
-    return result;
-  } catch (...) {
-    std::string err_msg = absl::StrCat(
-      "⛔ An unknown error occurred during directory check, aborting...");
-    result.err_code = -1;
-    result.err_msg = err_msg;
-    return result;
-  }
-
-  std::string err_msg = absl::StrCat(
-    "⛔ An unknown error occurred during directory check, aborting...");
-  result.err_code = -1;
-  result.err_msg = err_msg;
   return result;
 }
 
