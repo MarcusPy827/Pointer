@@ -43,7 +43,12 @@ struct WorkspaceInfoQueryPayload {
   int64_t config_updated;
   int64_t created_at;
   double version;
-  double min_compactable_version;
+  double min_compatible_version;
+};
+
+enum class FileType {
+  File,
+  Folder
 };
 
 class FileHandler {
@@ -62,7 +67,14 @@ class FileHandler {
 
   FileHandlerResult FileExists(std::string path);
 
+  WorkspaceInfoQueryPayload OpenWorkspaceDirectoryCheck(FileType type, std::string path,
+    int err_code_override = -1, std::string file_name_override = "",
+    std::string file_not_exist_msg_override = "");
+
   pointer::utils::Utils utils_helper_ = pointer::utils::Utils();
+
+  const std::string kWorkspaceConfigFolderName = ".pointer";
+  const std::string kWorkspaceConfigFileName = "config.json";
 };
 
 }  // namespace core

@@ -20,6 +20,7 @@
 #include <filesystem>
 #include <fstream>
 #include <vector>
+#include <typeinfo>
 
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
@@ -343,7 +344,7 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
 
     json_gen["versions"] = {
       { "created_version", utils_helper_.GetBackendVersion() },
-      { "min_compactable_version", utils_helper_
+      { "min_compatible_version", utils_helper_
           .GetCompactableWithMinBackendVersion() }
     };
 
@@ -375,6 +376,121 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
     "⛔ An unknown error occurred during directory check, aborting...");
   result.msg = err_msg;
   return result;
+}
+
+WorkspaceInfoQueryPayload FileHandler::OpenWorkSpace(std::string path) {
+  WorkspaceInfoQueryPayload result;
+  if (path.empty()) {
+    result.err_code = 1;
+    result.err_msg = absl::StrCat("⛔ The workspace path is empty, aborting...");
+    return result;
+  }
+
+  auto workspace_existance_test = FolderExists(path);
+  if (!workspace_existance_test.result) {
+    if (workspace_existance_test.msg == "🔍 The folder does NOT exist.") {
+      result.err_code = 2;
+      result.err_msg = absl::StrCat("⛔ The workspace folder does NOT exist, ",
+        "aborting...");
+      return result;
+    } else {
+      result.err_code = -1;
+      result.err_msg = workspace_existance_test.msg;
+    }
+  }
+
+  std::filesystem::path workspace_path = path;
+  std::filesystem::path workspace_config_path = workspace_path /
+    kWorkspaceConfigFolderName;
+
+  auto workspace_config_existance_test = FolderExists(workspace_config_path
+    .string());
+  if (!workspace_config_existance_test.result) {
+    if (workspace_config_existance_test.msg ==
+        "🔍 The folder does NOT exist.") {
+      result.err_code = 3;
+      result.err_msg = absl::StrCat("⛔ The workspace config folder does NOT ",
+        "exist, aborting...");
+      return result;
+    } else {
+      result.err_code = -1;
+      result.err_msg = workspace_config_existance_test.msg;
+    }
+  }
+
+  std::filesystem::path workspace_metadata_path = workspace_config_path /
+    kWorkspaceConfigFileName;
+
+  auto workspace_metadata_existance_test = FileExists(workspace_metadata_path
+    .string());
+  if (!workspace_metadata_existance_test.result) {
+    if (workspace_metadata_existance_test.msg ==
+        "🔍 The file does NOT exist.") {
+      result.err_code = 4;
+      result.err_msg = absl::StrCat("⛔ The workspace metadata file does NOT ",
+        "exist, aborting...");
+      return result;
+    } else {
+      result.err_code = -1;
+      result.err_msg = workspace_metadata_existance_test.msg;
+    }
+  }
+
+  try {
+    std::ifstream metadata_stream(workspace_metadata_path);
+    nlohmann::json metadata_read = nlohmann::json::parse(metadata_stream);
+
+    auto min_compatible_version = metadata_read.at("versions")
+      .at("min_compatible_version").get<double>();
+    auto created_version = metadata_read.at("versions")
+      .at("created_version").get<double>();
+
+    if (min_compatible_version <= 0) {
+      result.err_code = 5;
+      result.err_msg = absl::StrCat("⛔ The workspace is created by unknown ",
+        "version of Pointer, aborting...");
+      return result;
+    }
+      
+    if (min_compatible_version > utils_helper_.GetBackendVersion()) {
+      result.err_code = 6;
+      result.err_msg = absl::StrCat(
+        "💾 The workspace requires a newer version of pointer, aborting");
+      return result;
+    }
+
+    result.min_compatible_version = min_compatible_version;
+    result.version = created_version;
+    result.name = metadata_read.at("name").get<std::string>();
+    result.owner = metadata_read.at("owners").get<std::string>();
+    result.created_at = metadata_read.at("time").at("created_at")
+      .get<int64_t>();
+    result.config_updated = metadata_read.at("time").at("config_updated_at")
+      .get<int64_t>();
+    result.query_state = true;
+    return result;
+  } catch (const std::filesystem::filesystem_error& e) {
+    result.err_msg = absl::StrCat(
+      "⛔ A filesystem error occurred during workspace check.",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    result.err_code = -1;
+    return result;
+  } catch (const std::exception& e) {
+    result.err_msg = absl::StrCat(
+      "⛔ An exception occurred during workspace check.",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    result.err_code = -1;
+    return result;
+  } catch (...) {
+    result.err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during workspace check, aborting...");
+    result.err_code = -1;
+    return result;
+  }
+  result.err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during workspace check, aborting...");
+    result.err_code = -1;
+    return result;
 }
 
 }  // namespace core
