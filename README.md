@@ -18,14 +18,14 @@
   <p align="center">
     A local note taking app that utilize Vite + React + TypeScript as front-end, and Node-Addon-API + Morden C++ as back-end.
     <br />
-    <a href="docs"><strong>Explore the docs »</strong></a>
+    <a href="https://jihulab.com/MarcusPy827/Pointer/-/wikis/home"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">Release Page</a>
+    <a href="https://jihulab.com/MarcusPy827/Pointer/-/releases">Release Page</a>
     &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://jihulab.com/MarcusPy827/Pointer/-/issues/new">Report Bug</a>
     &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://jihulab.com/MarcusPy827/Pointer/-/issues/new">Request Feature</a>
   </p>
 </div>
 
@@ -126,7 +126,7 @@ The documentation is hosted on the project's main repository [wiki](https://jihu
 <!-- ROADMAP -->
 ## Roadmap
 - [ ] Basic workspace system
-- [ ] Translation
+- [x] Translation
   - [x] **ZH-CN**: 100%.
   - [x] **EN-US**: 100%, fallback language.
 

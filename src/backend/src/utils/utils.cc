@@ -438,15 +438,16 @@ GenericQueryResult Utils::GetUsername() {
   }
 
   try {
-    std::ifstream user_config(user_config_path);
-    nlohmann::json user_config_read = nlohmann::json::parse(user_config_path);
+    std::ifstream user_config(user_config_path.string());
+    nlohmann::json user_config_read = nlohmann::json::parse(user_config);
     if (user_config_read.contains("user_name")) {
       result.query_result = true;
       result.result_string = user_config_read.at("user_name").get<std::string>();
       return result;
     } else {
       user_config_read["user_name"] = kDefaultUsername;
-      std::ofstream file_stream(user_config_path, std::ios::out | std::ios::trunc);
+      std::ofstream file_stream(user_config_path.string(), std::ios::out |
+        std::ios::trunc);
       if (!file_stream) {
         result.err_msg = absl::StrCat(absl::StrFormat(
           "⛔ Cannot open config file \"%s\".", user_config_path));
