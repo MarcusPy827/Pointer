@@ -40,7 +40,6 @@ struct WorkspaceInfoQueryPayload {
   std::string name;
   std::string owner_uid;
   std::string owner_name;
-  std::vector<std::string> shared_with;
   int64_t config_updated;
   int64_t created_at;
   double version;

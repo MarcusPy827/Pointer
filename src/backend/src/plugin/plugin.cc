@@ -147,6 +147,46 @@ Napi::Value CreateWorkspaceWrapper(const Napi::CallbackInfo& callback_info) {
   return result;
 }
 
+Napi::Value OpenWorkspaceWrapper(const Napi::CallbackInfo& callback_info) {
+  Napi::Env env = callback_info.Env();
+  Napi::Object result;
+  std::string_view err_msg;
+
+  if (callback_info.Length() != 1) {
+    err_msg = "Argument amount MISMATCH!! Except 1 argument, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  } else if (!callback_info[0].IsString()) {
+    err_msg =
+      "Argument type MISMATCH!! The first argument MUST be string, aborting...";
+    result = ThrowError(env, err_msg);
+    return result;
+  }
+
+  // Get argument
+  std::string path = callback_info[0].As<Napi::String>().Utf8Value();
+
+  // Execute function
+  pointer::core::WorkspaceInfoQueryPayload original_result = file_handler_
+    .OpenWorkspace(path);
+
+  // Convert original result to object
+  result.Set("query_result", Napi::Boolean::New(env, original_result
+    .query_result));
+  result.Set("err_msg", Napi::String::New(env, original_result.err_msg));
+  result.Set("err_code", Napi::Number::New(env, original_result.err_code));
+  result.Set("name", Napi::String::New(env, original_result.name));
+  result.Set("owner_uid", Napi::String::New(env, original_result.owner_uid));
+  result.Set("owner_name", Napi::String::New(env, original_result.owner_name));
+  result.Set("config_updated", Napi::Number::New(env,
+    original_result.config_updated));
+  result.Set("created_at", Napi::Number::New(env, original_result.created_at));
+  result.Set("version", Napi::Number::New(env, original_result.version));
+  result.Set("min_compatible_version", Napi::Number::New(env, original_result
+    .min_compatible_version));
+  return result;
+}
+
 static Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("checkDirectoryExists", Napi::Function::New(env,
     CheckDirectoryExistsWrapper, "checkDirectoryExists"));
@@ -154,6 +194,8 @@ static Napi::Object Init(Napi::Env env, Napi::Object exports) {
     CheckIsDirectoryEmptyWrapper, "checkIsDirectoryEmpty"));
   exports.Set("createWorkspace", Napi::Function::New(env,
     CreateWorkspaceWrapper, "createWorkspace"));
+  exports.Set("openWorkspace", Napi::Function::New(env, OpenWorkspaceWrapper,
+    "openWorkspace"));
   return exports;
 }
 
