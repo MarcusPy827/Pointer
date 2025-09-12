@@ -333,9 +333,18 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
       return result;
     }
 
+    auto owner_name = utils_helper_.GetUsername();
+    if (!owner_name.query_result) {
+      result.msg = owner_name.err_msg;
+      return result;
+    }
+
     nlohmann::json json_gen;
     json_gen["name"] = name;
-    json_gen["owners"] = owner_id.result_string;
+    json_gen["owner"] = {
+      { "uid", owner_id.result_string },
+      { "display_name", owner_name.result_string }
+    };
 
     json_gen["time"] = {
       { "created_at", utils_helper_.GetCurrentTimestamp() },
@@ -462,7 +471,9 @@ WorkspaceInfoQueryPayload FileHandler::OpenWorkSpace(std::string path) {
     result.min_compatible_version = min_compatible_version;
     result.version = created_version;
     result.name = metadata_read.at("name").get<std::string>();
-    result.owner = metadata_read.at("owners").get<std::string>();
+    result.owner_uid = metadata_read.at("owners").at("uid").get<std::string>();
+    result.owner_name = metadata_read.at("owners").at("display_name")
+      .get<std::string>();
     result.created_at = metadata_read.at("time").at("created_at")
       .get<int64_t>();
     result.config_updated = metadata_read.at("time").at("config_updated_at")
