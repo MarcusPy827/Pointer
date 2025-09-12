@@ -15,5 +15,7 @@
   "err_empty_workspace_name": "The workspace name is empty, please specify one.",
   "err_empty_workspace_path": "The workspace path is empty, please specify one.",
   "err_log_in_console": "An error has occurred, please check the console for log output...",
-  "ok_workspace_created": "Successfully created your workspace!"
+  "err_invalid_path": "Bad luck, we've got invalid path, please try again.",
+  "ok_workspace_created": "Successfully created your workspace!",
+  "ok_workspace_opened": "Workspace has been opened."
 }

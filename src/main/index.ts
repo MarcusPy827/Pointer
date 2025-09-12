@@ -3,7 +3,7 @@ import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { WindowCommandType } from '../shared/WindowCommandType'
 import { FolderPath } from '../shared/FolderPath'
-import { DirectoryExistResult } from '../shared/BackendPromise'
+import { DirectoryExistResult, WorkspaceInfoQueryPayload } from '../shared/BackendPromise'
 
 import icon from '../../resources/icon.png?asset'
 import IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
@@ -159,6 +159,27 @@ ipcMain.handle(
     const mapped_result: DirectoryExistResult = {
       result: result.result,
       result_msg: result.msg
+    }
+    return mapped_result
+  }
+)
+
+// IPC: Open workspace
+ipcMain.handle(
+  'openWorkspaceAPI',
+  async (_event: IpcMainInvokeEvent, path: string): Promise<WorkspaceInfoQueryPayload> => {
+    const result = backend.openWorkspace(path)
+    const mapped_result: WorkspaceInfoQueryPayload = {
+      query_state: result.query_state,
+      err_msg: result.err_msg,
+      err_code: result.err_code,
+      name: result.name,
+      owner_uid: result.owner_uid,
+      owner_name: result.owner_name,
+      config_updated: result.config_updated,
+      created_at: result.created_at,
+      version: result.version,
+      min_compatible_version: result.min_compatible_version
     }
     return mapped_result
   }

@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { FolderPath } from '../../../shared/FolderPath'
+import { WorkspaceInfoQueryPayload } from '../../../shared/BackendPromise'
 
 export default function ErrNoWorkspaceOpened(): JSX.Element {
   const { t } = useTranslation()
@@ -17,6 +18,52 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
   const [workspaceCreationDialogLoading, setWorkspaceCreationDialogLoading] = useState(false)
   const [workspaceName, setWorkspaceName] = useState<string>('')
   const [workspacePath, setWorkspacePath] = useState<string>('')
+
+  const handleOpenWorkspace = async (path?: string): Promise<void> => {
+    let folderPath = path
+    if (!path) {
+      const result: folderPath = await window.api.openFolderFunc()
+      if (result.cancelled) {
+        messageApi.open({
+          type: 'warning',
+          content: t('cancelled_message')
+        })
+      } else {
+        if (result.path != undefined) {
+          folderPath = result.path
+        } else {
+          messageApi.open({
+            type: 'warning',
+            content: t('err_invalid_path')
+          })
+        }
+      }
+    }
+
+    const queryResult: WorkspaceInfoQueryPayload = await window.api.openWorkspaceFunc(folderPath)
+    console.info(`Trying to open ${folderPath}.`)
+    if (queryResult.query_state) {
+      messageApi.open({
+        type: 'success',
+        content: t('ok_workspace_opened')
+      })
+
+      let workspaceInfoLog: string = 'Workspace opened.\n'
+      workspaceInfoLog += `Workspace name: ${queryResult.name}.\n`
+      workspaceInfoLog += `Workspace path: ${folderPath}.\n`
+      workspaceInfoLog += `Owner UID: ${queryResult.owner_uid}.\n`
+      workspaceInfoLog += `Owner name: ${queryResult.owner_name}.\n`
+      workspaceInfoLog += `Config created: ${new Date(queryResult.created_at)}.\n`
+      workspaceInfoLog += `Config last modified: ${new Date(queryResult.config_updated)}.\n`
+      workspaceInfoLog += `Created with Pointer version: ${queryResult.version}.\n`
+      workspaceInfoLog += `Minimum compatible Pointer version: ${queryResult.min_compatible_version}.\n`
+      console.info(workspaceInfoLog)
+    } else {
+      console.error(
+        `An error occurred while opening the workspace.\nThe backend returned: ${queryResult.err_msg}.`
+      )
+    }
+  }
 
   const showWorkspaceCreationDialog = (): void => {
     setIsWorkspaceCreationDialogOpened(true)
@@ -145,7 +192,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
         <Typography>
           <ul>
             <li className="no-select">
-              <Typography.Link className="app-text no-select">
+              <Typography.Link className="app-text no-select" onClick={() => handleOpenWorkspace()}>
                 <FolderOpenOutlined />
                 &nbsp;&nbsp;
                 {t('open_workspace_action')}

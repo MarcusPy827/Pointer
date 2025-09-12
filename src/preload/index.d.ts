@@ -8,6 +8,7 @@ interface RenderAPI {
   openFolderFunc: () => Promise<FolderPath>
   checkIfDirectoryExistsFunc: (path: string, create_mode: boolean) => Promise<DirectoryExistResult>
   createWorkspaceFunc: (path: string, name: string) => Promise<DirectoryExistResult>
+  openWorkspaceFunc: (path: string) => Promise<DirectoryExistResult>
 }
 
 declare global {

@@ -471,8 +471,8 @@ WorkspaceInfoQueryPayload FileHandler::OpenWorkSpace(std::string path) {
     result.min_compatible_version = min_compatible_version;
     result.version = created_version;
     result.name = metadata_read.at("name").get<std::string>();
-    result.owner_uid = metadata_read.at("owners").at("uid").get<std::string>();
-    result.owner_name = metadata_read.at("owners").at("display_name")
+    result.owner_uid = metadata_read.at("owner").at("uid").get<std::string>();
+    result.owner_name = metadata_read.at("owner").at("display_name")
       .get<std::string>();
     result.created_at = metadata_read.at("time").at("created_at")
       .get<int64_t>();

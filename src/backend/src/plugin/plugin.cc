@@ -149,7 +149,7 @@ Napi::Value CreateWorkspaceWrapper(const Napi::CallbackInfo& callback_info) {
 
 Napi::Value OpenWorkspaceWrapper(const Napi::CallbackInfo& callback_info) {
   Napi::Env env = callback_info.Env();
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   std::string_view err_msg;
 
   if (callback_info.Length() != 1) {
@@ -168,11 +168,11 @@ Napi::Value OpenWorkspaceWrapper(const Napi::CallbackInfo& callback_info) {
 
   // Execute function
   pointer::core::WorkspaceInfoQueryPayload original_result = file_handler_
-    .OpenWorkspace(path);
+    .OpenWorkSpace(path);
 
   // Convert original result to object
-  result.Set("query_result", Napi::Boolean::New(env, original_result
-    .query_result));
+  result.Set("query_state", Napi::Boolean::New(env, original_result
+    .query_state));
   result.Set("err_msg", Napi::String::New(env, original_result.err_msg));
   result.Set("err_code", Napi::Number::New(env, original_result.err_code));
   result.Set("name", Napi::String::New(env, original_result.name));

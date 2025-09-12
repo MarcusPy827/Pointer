@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { WindowCommandType } from '../shared/WindowCommandType'
 import { FolderPath } from '../shared/FolderPath'
-import { DirectoryExistResult } from '../shared/BackendPromise'
+import { DirectoryExistResult, WorkspaceInfoQueryPayload } from '../shared/BackendPromise'
 
 // Custom APIs for renderer
 const api = {
@@ -17,8 +17,12 @@ const api = {
     ipcRenderer.invoke('checkIfDirectoryExistsAPI', path, create_mode),
 
   // API: Create workspace
-  createWorkspaceFunc: (path: string, name: string): Promise<DirectoryExistResult> =>
-    ipcRenderer.invoke('createWorkspaceAPI', path, name)
+  createWorkspaceFunc: (path: string, name: string): Promise<WorkspaceInfoQueryPayload> =>
+    ipcRenderer.invoke('createWorkspaceAPI', path, name),
+
+  // API: Open workspace
+  openWorkspaceFunc: (path: string): Promise<DirectoryExistResult> =>
+    ipcRenderer.invoke('openWorkspaceAPI', path)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

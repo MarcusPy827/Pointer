@@ -1,4 +1,4 @@
 export type FolderPath = {
-  cancelled: boolean,
+  cancelled: boolean
   path?: string
 }
