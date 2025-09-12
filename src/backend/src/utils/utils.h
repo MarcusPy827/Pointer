@@ -40,7 +40,7 @@ struct PathHandlerPathResult {
 struct GenericQueryResult {
   bool query_result = false;
   std::string err_msg;
-  std::string result;
+  std::string result_string;
 };
 
 class Utils {
@@ -69,6 +69,8 @@ class Utils {
 
   PathHandlerPathResult GetUserUUIDPath();
 
+  GenericQueryResult GetUsername();
+
  private:
   std::string backend_version_string_ = "1.0.0";
 
@@ -79,6 +81,8 @@ class Utils {
   double compactable_with_min_backend_version_ = 1.0;
 
   const std::string_view kApplicationName = "marcus.pointer.app";
+
+  const std::string_view kDefaultUsername = "%NO_NAME%";
 };
 
 }  // namespace utils

@@ -62,7 +62,7 @@ GenericQueryResult Utils::GetUserUuid() {
     std::ifstream json_file(uuid_path_raw.path);
     nlohmann::json json_read;
     json_file >> json_read;
-    std::string user_uuid = json_read["user_uuid"];
+    std::string user_uuid = json_read["user_uuid"].get<std::string>();
     if (user_uuid.empty()) {
       err_msg = absl::StrCat("⛔ Bad luck, user uuid is empty. This could be ",
         "caused by a bad initialization.");
@@ -71,7 +71,7 @@ GenericQueryResult Utils::GetUserUuid() {
     }
 
     result.query_result = true;
-    result.result = user_uuid;
+    result.result_string = user_uuid;
     return result;
   } catch (const std::filesystem::filesystem_error& e) {
     err_msg = absl::StrCat(
@@ -411,6 +411,76 @@ PathHandlerPathResult Utils::GetUserUUIDPath() {
   err_msg = absl::StrCat(
       "⛔ An unknown error occurred during uuid path check, aborting...");
   result.err_msg = err_msg;
+  return result;
+}
+
+GenericQueryResult Utils::GetUsername() {
+  GenericQueryResult result;
+
+  auto config_path = GetConfigPath();
+  if (!config_path.result) {
+    result.err_msg = config_path.err_msg;
+    return result;
+  }
+
+  std::filesystem::path user_config_path = std::filesystem::path(config_path
+    .path) / "user.json";
+  auto file_existance_test_result = FileExists(user_config_path.string());
+  if (!file_existance_test_result.result) {
+    if (file_existance_test_result.err_msg != "🔍 The file does NOT exist.") {
+      result.err_msg = file_existance_test_result.err_msg;
+      return result;
+    } else {
+      // If user.json does NOT exist, create it and generate user UUID before
+      // continuing...
+      GetUserUUIDPath();
+    }
+  }
+
+  try {
+    std::ifstream user_config(user_config_path);
+    nlohmann::json user_config_read = nlohmann::json::parse(user_config_path);
+    if (user_config_read.contains("user_name")) {
+      result.query_result = true;
+      result.result_string = user_config_read.at("user_name").get<std::string>();
+      return result;
+    } else {
+      user_config_read["user_name"] = kDefaultUsername;
+      std::ofstream file_stream(user_config_path, std::ios::out | std::ios::trunc);
+      if (!file_stream) {
+        result.err_msg = absl::StrCat(absl::StrFormat(
+          "⛔ Cannot open config file \"%s\".", user_config_path));
+        return result;
+      }
+
+      std::string file_content = user_config_read.dump(2);
+      file_stream.write(file_content.data(), static_cast<std::streamsize>
+        (file_content.size()));
+      file_stream.flush();
+      file_stream.close();
+
+      result.query_result = true;
+      result.result_string = kDefaultUsername.data();
+      return result;
+    }
+  } catch (const std::filesystem::filesystem_error& e) {
+    result.err_msg = absl::StrCat(
+      "⛔ A filesystem error occurred during user name check. ",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    return result;
+  } catch (const std::exception& e) {
+    result.err_msg = absl::StrCat(
+      "⛔ An exception occurred during user name check. ",
+      absl::StrFormat("The backend returned: %s", e.what()));
+    return result;
+  } catch (...) {
+    result.err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during user name check, aborting...");
+    return result;
+  }
+
+  result.err_msg = absl::StrCat(
+      "⛔ An unknown error occurred during user name check, aborting...");
   return result;
 }
 

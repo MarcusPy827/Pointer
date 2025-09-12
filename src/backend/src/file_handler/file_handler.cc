@@ -335,7 +335,7 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
 
     nlohmann::json json_gen;
     json_gen["name"] = name;
-    json_gen["owners"] = owner_id.result;
+    json_gen["owners"] = owner_id.result_string;
 
     json_gen["time"] = {
       { "created_at", utils_helper_.GetCurrentTimestamp() },
