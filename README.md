@@ -97,9 +97,7 @@ We are committed to privacy protection. All data in this app is stored locally, 
 
 <!-- GETTING STARTED -->
 ## Getting Started
-(WIP)
-
-This is a simplified version, please refer to the documents in `docs` folder for full instructions.
+TO get started, please visit the compile guide on the [wiki](https://jihulab.com/MarcusPy827/Pointer/-/wikis/en/Compile-Guide).
 
 ### Prerequisites
 You will need these two libraries in your environment path that CMake and gyp could find when compling the backend:
