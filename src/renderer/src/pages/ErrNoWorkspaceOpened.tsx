@@ -49,14 +49,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
       })
 
       let workspaceInfoLog: string = 'Workspace opened.\n'
-      workspaceInfoLog += `Workspace name: ${queryResult.name}.\n`
-      workspaceInfoLog += `Workspace path: ${folderPath}.\n`
-      workspaceInfoLog += `Owner UID: ${queryResult.owner_uid}.\n`
-      workspaceInfoLog += `Owner name: ${queryResult.owner_name}.\n`
-      workspaceInfoLog += `Config created: ${new Date(queryResult.created_at)}.\n`
-      workspaceInfoLog += `Config last modified: ${new Date(queryResult.config_updated)}.\n`
-      workspaceInfoLog += `Created with Pointer version: ${queryResult.version}.\n`
-      workspaceInfoLog += `Minimum compatible Pointer version: ${queryResult.min_compatible_version}.\n`
+      workspaceInfoLog += `${JSON.stringify(queryResult)}`
       console.info(workspaceInfoLog)
     } else {
       console.error(
@@ -103,6 +96,8 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
         type: 'success',
         content: t('ok_workspace_created')
       })
+
+      handleOpenWorkspace(workspacePath)
     }
   }
 
