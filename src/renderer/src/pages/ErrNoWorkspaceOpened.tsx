@@ -7,11 +7,13 @@ import {
   FolderOutlined
 } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
+import { useWorkspaceContext } from '../context/WorkspaceBridge'
 import { FolderPath } from '../../../shared/FolderPath'
 import { WorkspaceInfoQueryPayload } from '../../../shared/BackendPromise'
 
 export default function ErrNoWorkspaceOpened(): JSX.Element {
   const { t } = useTranslation()
+  const { setIsWorkspaceOpened } = useWorkspaceContext()
 
   const [messageApi, contextHolder] = message.useMessage()
   const [isWorkspaceCreationDialogOpened, setIsWorkspaceCreationDialogOpened] = useState(false)
@@ -22,7 +24,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
   const handleOpenWorkspace = async (path?: string): Promise<void> => {
     let folderPath = path
     if (!path) {
-      const result: folderPath = await window.api.openFolderFunc()
+      const result: FolderPath = await window.api.openFolderFunc()
       if (result.cancelled) {
         messageApi.open({
           type: 'warning',
@@ -47,6 +49,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
         type: 'success',
         content: t('ok_workspace_opened')
       })
+      setIsWorkspaceOpened(true)
 
       let workspaceInfoLog: string = 'Workspace opened.\n'
       workspaceInfoLog += `${JSON.stringify(queryResult)}`
