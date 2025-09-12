@@ -15,6 +15,14 @@ html, body {
   -webkit-user-select: none !important;
 }
 
+.drag-but-no-select {
+  user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-app-region: drag !important;
+}
+
 .title-bar {
   color: var(--on-background);
   background: var(--background);
@@ -54,6 +62,21 @@ html, body {
   justify-content: flex-start;
   align-items: center;
   -webkit-app-region: no-drag;
+}
+
+.titlebar-menu {
+  color: var(--on-background);
+  background: var(--background);
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.titlebar-menu:hover {
+  color: var(--on-background);
+  background: var(--background);
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.2s;
 }
 
 .app-title {
