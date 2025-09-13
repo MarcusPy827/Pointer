@@ -61,11 +61,11 @@ export default function App(): JSX.Element {
           <TitleBar />
           <ToolBar />
           <div className="main-panel-container">
-            <div className="side-panel">
+            <div className="side-panel" style={{ display: isWorkspaceOpened ? 'inherit' : 'none' }}>
               <div className="side-panel-content">[Work in progress...]</div>
             </div>
 
-            <div className="content-panel">
+            <div className={isWorkspaceOpened ? 'content-panel' : 'content-panel-no-sidebar'}>
               {isWorkspaceOpened ? <MyLibrary /> : <ErrNoWorkspaceOpened />}
             </div>
           </div>

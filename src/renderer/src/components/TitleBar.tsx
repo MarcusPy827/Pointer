@@ -3,7 +3,7 @@ import { getAppVersionString } from './Versions'
 import { WindowCommandType } from '../../../shared/WindowCommandType'
 import 'mdui/dist/css/mdui.min.css'
 import 'mdui/dist/js/mdui.min.js'
-import type { MenuProps } from 'antd';
+import type { MenuProps } from 'antd'
 import { Dropdown } from 'antd'
 
 export default function TitleBar(): JSX.Element {

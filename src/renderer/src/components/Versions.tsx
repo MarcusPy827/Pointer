@@ -5,6 +5,7 @@ export function getAppVersionString(): string {
 }
 
 function Versions(): React.JSX.Element {
+  // @ts-ignore Field defined by electron
   const [versions] = useState(window.electron.process.versions)
 
   return (

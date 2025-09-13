@@ -25,6 +25,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
   const handleOpenWorkspace = async (path?: string): Promise<void> => {
     let folderPath: string = path ?? ''
     if (!path) {
+      // @ts-ignore API field already defined in preload
       const result: FolderPath = await window.api.openFolderFunc()
       if (result.cancelled) {
         messageApi.open({
@@ -43,6 +44,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
       }
     }
 
+    // @ts-ignore API field already defined in preload
     const queryResult: WorkspaceInfoQueryPayload = await window.api.openWorkspaceFunc(folderPath)
     console.info(`Trying to open ${folderPath}.`)
     if (queryResult.query_state) {
@@ -86,6 +88,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
       return
     }
 
+    // @ts-ignore API field already defined in preload
     const isFolderExist = await window.api.createWorkspaceFunc(workspacePathInternal, workspaceName)
     if (!isFolderExist.result) {
       setWorkspaceCreationDialogLoading(false)
@@ -118,6 +121,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
   }
 
   const handleWorkspaceBrowse = async (): Promise<void> => {
+    // @ts-ignore API field already defined in preload
     const result: FolderPath = await window.api.openFolderFunc()
     if (result.cancelled) {
       messageApi.open({

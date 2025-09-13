@@ -8,13 +8,13 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: "en",
+    fallbackLng: 'en',
     lng: navigator.language,
     debug: true,
     interpolation: {
       escapeValue: false
     }
   })
-  .then(() => console.log("✅ Successfully loaded translations resources."))
+  .then(() => console.log('✅ Successfully loaded translations resources.'))
 
 export default i18n
