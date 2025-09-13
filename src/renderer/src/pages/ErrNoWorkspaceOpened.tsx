@@ -14,15 +14,16 @@ import { WorkspaceInfoQueryPayload } from '../../../shared/BackendPromise'
 export default function ErrNoWorkspaceOpened(): JSX.Element {
   const { t } = useTranslation()
   const { setIsWorkspaceOpened } = useWorkspaceContext()
+  const { setWorkspacePath, setWorkspaceState } = useWorkspaceContext()
 
   const [messageApi, contextHolder] = message.useMessage()
   const [isWorkspaceCreationDialogOpened, setIsWorkspaceCreationDialogOpened] = useState(false)
   const [workspaceCreationDialogLoading, setWorkspaceCreationDialogLoading] = useState(false)
   const [workspaceName, setWorkspaceName] = useState<string>('')
-  const [workspacePath, setWorkspacePath] = useState<string>('')
+  const [workspacePathInternal, setWorkspacePathInternal] = useState<string>('')
 
   const handleOpenWorkspace = async (path?: string): Promise<void> => {
-    let folderPath = path
+    let folderPath: string = path ?? ''
     if (!path) {
       const result: FolderPath = await window.api.openFolderFunc()
       if (result.cancelled) {
@@ -49,7 +50,10 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
         type: 'success',
         content: t('ok_workspace_opened')
       })
+
       setIsWorkspaceOpened(true)
+      setWorkspacePath(folderPath)
+      setWorkspaceState(queryResult)
 
       let workspaceInfoLog: string = 'Workspace opened.\n'
       workspaceInfoLog += `${JSON.stringify(queryResult)}`
@@ -73,7 +77,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
         content: t('err_empty_workspace_name')
       })
       return
-    } else if (workspacePath === '') {
+    } else if (workspacePathInternal === '') {
       setWorkspaceCreationDialogLoading(false)
       messageApi.open({
         type: 'error',
@@ -82,7 +86,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
       return
     }
 
-    const isFolderExist = await window.api.createWorkspaceFunc(workspacePath, workspaceName)
+    const isFolderExist = await window.api.createWorkspaceFunc(workspacePathInternal, workspaceName)
     if (!isFolderExist.result) {
       setWorkspaceCreationDialogLoading(false)
       messageApi.open({
@@ -100,7 +104,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
         content: t('ok_workspace_created')
       })
 
-      handleOpenWorkspace(workspacePath)
+      handleOpenWorkspace(workspacePathInternal)
     }
   }
 
@@ -122,7 +126,7 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
       })
     } else {
       if (result.path != undefined) {
-        setWorkspacePath(result.path)
+        setWorkspacePathInternal(result.path)
       }
     }
   }
@@ -161,9 +165,9 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
             className="no-select"
             prefix={<FolderOutlined />}
             draggable={false}
-            value={workspacePath}
+            value={workspacePathInternal}
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
-              setWorkspacePath(event.target.value)
+              setWorkspacePathInternal(event.target.value)
             }
           />
           <Button type="primary" onClick={() => handleWorkspaceBrowse()}>

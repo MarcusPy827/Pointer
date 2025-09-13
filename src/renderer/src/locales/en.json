@@ -3,6 +3,7 @@
   "cancel_text": "Cancel",
   "my_workspace_title": "My Workspace",
   "no_workspace_opened_title": "No Workspace Opened",
+  "unnamed_workspace": "Untitled Workspace",
   "open_workspace_desc": "To open a workspace, you may visit the menu bar's \"File\" section or simply select one option from below: ",
   "open_workspace_action": "Open workspace",
   "create_workspace_action": "Create workspace",
