@@ -26,6 +26,9 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
+    "@milkdown/crepe": "^7.15.5",
+    "@milkdown/kit": "^7.15.5",
+    "@milkdown/react": "^7.15.5",
     "antd": "^5.27.0",
     "i18next": "^25.4.0",
     "i18next-browser-languagedetector": "^8.2.0",

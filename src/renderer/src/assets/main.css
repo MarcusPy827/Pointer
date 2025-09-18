@@ -180,3 +180,31 @@ html, body {
 .app-text-smaller {
   font-size: 14px;
 }
+
+.editor-toolbar {
+  height: 64px;
+  width: calc(100% - 32px);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-bottom: 1px solid var(--toolbar-border);
+}
+
+.editor-toolbar-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.editor-area {
+  max-height: calc(100% - 65px);
+  overflow-y: scroll;
+}

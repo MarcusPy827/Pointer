@@ -4,6 +4,7 @@
   --subtitle: #999999;
   --content-panel-background: #ffffff;
   --on-content-panel-background: #212121;
+  --toolbar-border: #dddddd;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,5 +14,6 @@
     --subtitle: #dddddd;
     --content-panel-background: #282828;
     --on-content-panel-background: #ffffff;
+    --toolbar-border: #a0a0a0;
   }
 }

@@ -8,7 +8,7 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cmake.sourceDirectory": "D:/Repositories/Public/Pointer/src/backend",
+  "cmake.sourceDirectory": "/home/yue/Desktop/Repositories/Public/Pointer/src/backend",
   "C_Cpp.errorSquiggles": "enabled",
   "files.associations": {
     "any": "cpp",

@@ -7,6 +7,7 @@ import ToolBar from './components/ToolBar'
 import MyLibrary from './pages/MyLibrary'
 import ErrNoWorkspaceOpened from './pages/ErrNoWorkspaceOpened'
 import './assets/main.css'
+import EditorWrapper from './components/EditorWrapper'
 
 export default function App(): JSX.Element {
   const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -66,7 +67,7 @@ export default function App(): JSX.Element {
             </div>
 
             <div className={isWorkspaceOpened ? 'content-panel' : 'content-panel-no-sidebar'}>
-              {isWorkspaceOpened ? <MyLibrary /> : <ErrNoWorkspaceOpened />}
+              {isWorkspaceOpened ? <EditorWrapper /> : <ErrNoWorkspaceOpened />}
             </div>
           </div>
         </WorkspaceContext.Provider>

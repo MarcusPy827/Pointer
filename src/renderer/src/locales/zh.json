@@ -18,5 +18,9 @@
   "err_log_in_console": "发生错误，请打开控制台查看",
   "err_invalid_path": "路径异常，请重试",
   "ok_workspace_created": "已成功创建工作区",
-  "ok_workspace_opened": "工作区已打开"
+  "ok_workspace_opened": "工作区已打开",
+  "untitled_document": "未命名文档",
+  "markdown_editor_desc": "Markdown编辑器",
+  "code_editor_desc": "代码编辑器",
+  "markdown_renderer_desc": "笔记渲染器"
 }

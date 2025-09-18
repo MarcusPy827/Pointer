@@ -18,5 +18,9 @@
   "err_log_in_console": "An error has occurred, please check the console for log output...",
   "err_invalid_path": "Bad luck, we've got invalid path, please try again.",
   "ok_workspace_created": "Successfully created your workspace!",
-  "ok_workspace_opened": "Workspace has been opened."
+  "ok_workspace_opened": "Workspace has been opened.",
+  "untitled_document": "Untitled Document",
+  "markdown_editor_desc": "Markdown Editor",
+  "code_editor_desc": "Code Editor",
+  "markdown_renderer_desc": "Note Renderer"
 }
