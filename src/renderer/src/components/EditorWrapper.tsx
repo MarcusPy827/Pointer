@@ -1,12 +1,14 @@
 import { Typography, Dropdown, MenuProps } from 'antd'
 import { EditOutlined, CodeOutlined, EyeOutlined, CaretDownOutlined } from '@ant-design/icons'
 import { JSX, useState } from 'react'
-import { MarkdownEditor } from './MarkdownEditor'
 import { useTranslation } from 'react-i18next'
+import NoteRenderer from './NoteRendererWrapper'
+import MarkdownEditor from './MarkdownEditor'
 
 export default function EditorWrapper(): JSX.Element {
   const { t } = useTranslation()
   const [editorKey, setEditorKey] = useState<string>('1')
+  const [documentContent, setDocumentContent] = useState<string>('')
 
   const editorWrapperList: MenuProps['items'] = [
     {
@@ -80,7 +82,13 @@ export default function EditorWrapper(): JSX.Element {
       </div>
 
       <div className="editor-area">
-        <MarkdownEditor />
+        {editorKey === '1' ? (
+          <MarkdownEditor
+            documentContent={documentContent}
+            setDocumentContent={setDocumentContent}
+          />
+        ) : null}
+        {editorKey === '3' ? <NoteRenderer documentContent={documentContent} /> : null}
       </div>
     </>
   )

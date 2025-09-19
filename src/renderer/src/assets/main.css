@@ -208,3 +208,11 @@ html, body {
   max-height: calc(100% - 65px);
   overflow-y: scroll;
 }
+
+.note-renderer {
+  padding: 32px;
+  max-width: calc(100% - 64px);
+  min-width: calc(100% - 64px);
+  max-height: calc(100% - 65px - 64px);
+  overflow-y: scroll;
+}

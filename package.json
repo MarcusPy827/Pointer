@@ -35,7 +35,13 @@
     "i18next-http-backend": "^3.0.2",
     "mdui": "^1.0.2",
     "node-addon-api": "^8.5.0",
-    "react-i18next": "^15.7.0"
+    "react-i18next": "^15.7.0",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^15.6.6",
+    "rehype-katex": "^7.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
