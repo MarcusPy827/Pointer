@@ -29,6 +29,7 @@
     "@milkdown/crepe": "^7.15.5",
     "@milkdown/kit": "^7.15.5",
     "@milkdown/react": "^7.15.5",
+    "@monaco-editor/react": "^4.7.0",
     "antd": "^5.27.0",
     "i18next": "^25.4.0",
     "i18next-browser-languagedetector": "^8.2.0",
@@ -41,7 +42,8 @@
     "rehype-katex": "^7.0.1",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
-    "remark-math": "^6.0.0"
+    "remark-math": "^6.0.0",
+    "ts-protoc-gen": "^0.15.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
@@ -59,10 +61,12 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
+    "monaco-editor": "^0.53.0",
     "prettier": "^3.6.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "typescript": "^5.8.3",
-    "vite": "^7.0.5"
+    "vite": "^7.0.5",
+    "vite-plugin-static-copy": "^3.1.2"
   }
 }

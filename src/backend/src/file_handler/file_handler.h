@@ -27,6 +27,8 @@
 namespace pointer {
 namespace core {
 
+// Depreciated: Switch to proto_gen/cpp/src/proto/file_handler.pb.h
+// TODO: Fully switch to proctol buffer
 struct FileHandlerResult {
   bool result = false;
   int err_code;

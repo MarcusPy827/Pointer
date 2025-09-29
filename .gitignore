@@ -1,8 +1,21 @@
+# Node library
 node_modules
+
+# Node build
 dist
 out
 build
+
+# Backend build
 src/backend/build
-.DS_Store
+
+# Protobuf gen
+src/proto_gen/cpp/*
+src/proto_gen/ts/*
+
+# Cache & log
 .eslintcache
 *.log*
+
+# Filesystem
+.DS_Store
