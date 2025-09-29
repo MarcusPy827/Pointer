@@ -24,29 +24,10 @@
 
 #include "src/utils/utils.h"
 
+#include "src/proto_gen/src/proto/file_handler.pb.h"
+
 namespace pointer {
 namespace core {
-
-// Depreciated: Switch to proto_gen/cpp/src/proto/file_handler.pb.h
-// TODO: Fully switch to proctol buffer
-struct FileHandlerResult {
-  bool result = false;
-  int err_code;
-  std::string msg;
-};
-
-struct WorkspaceInfoQueryPayload {
-  bool query_state = false;
-  std::string err_msg;
-  int err_code;
-  std::string name;
-  std::string owner_uid;
-  std::string owner_name;
-  int64_t config_updated;
-  int64_t created_at;
-  double version;
-  double min_compatible_version;
-};
 
 enum class FileType {
   File,
@@ -76,6 +57,7 @@ class FileHandler {
   pointer::utils::Utils utils_helper_ = pointer::utils::Utils();
 
   const std::string kWorkspaceConfigFolderName = ".pointer";
+
   const std::string kWorkspaceConfigFileName = "config.json";
 };
 

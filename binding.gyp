@@ -17,11 +17,13 @@
         "./src/backend/src/file_handler/file_handler.h",
         "./src/backend/src/file_handler/file_handler.cc",
         "./src/backend/src/utils/utils.h",
-        "./src/backend/src/utils/utils.cc"
+        "./src/backend/src/utils/utils.cc",
+        ".src/proto_gen/cpp/src/proto/file_handler.pb.h"
       ],
       "include_dirs": [
         "./node_modules/node-addon-api/",
         "./src/backend/",
+        "./src/proto_gen/",
         "<(absl_includedir)"
       ],
       "defines": [

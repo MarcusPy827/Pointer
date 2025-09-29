@@ -37,26 +37,14 @@ bold "Protobuf Generate Script Version 0.9"
 log_tag "warn" "Dependency requirement" "Please make sure that you have already have protobuf ready in your path."
 log_tag "warn" "Path requirement" "Please run this script on project root using \"scripts/proto_gen.sh\", please do NOT run it within the \"scripts\" folder, otherwise protoc might NOT find all the proto files!!"
 
-log_tag "info" "Path handler" "Now checking if the directory \"src/proto_gen\" exists..."
-if [ -d "./src/proto_gen" ]; then
-  log_tag "ok" "Path handler" "The directory \"src/proto_gen\" exists."
+log_tag "info" "Path handler" "Now checking if the directory \"src/backend/src/proto_gen\" exists..."
+if [ -d "./src/backend/src/proto_gen" ]; then
+  log_tag "ok" "Path handler" "The directory \"src/backend/proto_gen\" exists."
 else
-  if mkdir "./src/proto_gen"; then
-    log_tag "ok" "Path handler" "Successfully created path \"src/proto_gen\"."
+  if mkdir "./src/backend/src/proto_gen"; then
+    log_tag "ok" "Path handler" "Successfully created path \"src/backend/src/proto_gen\"."
   else
-    log_tag "error" "Path handler" "Could not create path \"src/proto_gen\", aborting..."
-    exit -1
-  fi
-fi
-
-log_tag "info" "Path handler" "Now checking if the directory \"src/proto_gen/cpp\" exists..."
-if [ -d "./src/proto_gen/cpp" ]; then
-  log_tag "ok" "Path handler" "The directory \"src/proto_gen/cpp\" exists."
-else
-  if mkdir "./src/proto_gen/cpp"; then
-    log_tag "ok" "Path handler" "Successfully created path \"src/proto_gen/cpp\"."
-  else
-    log_tag "error" "Path handler" "Could not create path \"src/proto_gen/cpp\", aborting..."
+    log_tag "error" "Path handler" "Could not create path \"src/backend/src/proto_gen\", aborting..."
     exit -1
   fi
 fi
@@ -75,8 +63,8 @@ fi
 
 
 log_tag "info" "Generator" "Now trying to generate protobuf files for file handler..."
-if protoc --cpp_out=src/proto_gen/cpp ./src/proto/file_handler.proto; then
-  log_tag "ok" "Generator" "Successfully generated include file for \"file handler.proto\""
+if protoc --cpp_out=src/backend/src/proto_gen ./src/proto/file_handler.proto; then
+  log_tag "ok" "Generator" "Successfully generated include headers for \"file handler.proto\""
 else
   log_tag "error" "Generator" "Failed to generate source for \"file_handler.proto\", aborting..."
   exit -1

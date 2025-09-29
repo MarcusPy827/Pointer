@@ -20,6 +20,7 @@
 
 #include "../file_handler/file_handler.h"
 #include "../utils/utils.h"
+#include "../proto_gen/src/proto/file_handler.pb.h"
 
 pointer::core::FileHandler file_handler_;
 pointer::utils::Utils utils_;
@@ -27,8 +28,8 @@ pointer::utils::Utils utils_;
 inline Napi::Object FileHandlerResult2Object(Napi::Env env,
     pointer::core::FileHandlerResult result) {
   Napi::Object object_gen = Napi::Object::New(env);
-  object_gen.Set("result", Napi::Boolean::New(env, result.result));
-  object_gen.Set("msg", Napi::String::New(env, result.msg));
+  object_gen.Set("result", Napi::Boolean::New(env, result.result()));
+  object_gen.Set("msg", Napi::String::New(env, result.err_msg()));
   return object_gen;
 }
 
@@ -172,18 +173,19 @@ Napi::Value OpenWorkspaceWrapper(const Napi::CallbackInfo& callback_info) {
 
   // Convert original result to object
   result.Set("query_state", Napi::Boolean::New(env, original_result
-    .query_state));
-  result.Set("err_msg", Napi::String::New(env, original_result.err_msg));
-  result.Set("err_code", Napi::Number::New(env, original_result.err_code));
-  result.Set("name", Napi::String::New(env, original_result.name));
-  result.Set("owner_uid", Napi::String::New(env, original_result.owner_uid));
-  result.Set("owner_name", Napi::String::New(env, original_result.owner_name));
+    .query_state()));
+  result.Set("err_msg", Napi::String::New(env, original_result.err_msg()));
+  result.Set("err_code", Napi::Number::New(env, original_result.err_code()));
+  result.Set("name", Napi::String::New(env, original_result.name()));
+  result.Set("owner_uid", Napi::String::New(env, original_result.owner_uid()));
+  result.Set("owner_name", Napi::String::New(env, original_result
+    .owner_name()));
   result.Set("config_updated", Napi::Number::New(env,
-    original_result.config_updated));
-  result.Set("created_at", Napi::Number::New(env, original_result.created_at));
-  result.Set("version", Napi::Number::New(env, original_result.version));
+    original_result.config_updated()));
+  result.Set("created_at", Napi::Number::New(env, original_result.created_at()));
+  result.Set("version", Napi::Number::New(env, original_result.version()));
   result.Set("min_compatible_version", Napi::Number::New(env, original_result
-    .min_compatible_version));
+    .min_compatible_version()));
   return result;
 }
 
