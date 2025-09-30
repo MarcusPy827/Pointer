@@ -22,6 +22,8 @@
 #include <string>
 #include <vector>
 
+#include "src/proto_gen/src/proto/utils.pb.h"
+
 namespace pointer {
 namespace utils {
 
@@ -29,18 +31,6 @@ enum class SystemType {
   kWindows,
   kMacOS,
   kUnixLike
-};
-
-struct PathHandlerPathResult {
-  bool result = false;
-  std::string err_msg;
-  std::string path;
-};
-
-struct GenericQueryResult {
-  bool query_result = false;
-  std::string err_msg;
-  std::string result_string;
 };
 
 class Utils {

@@ -18,13 +18,16 @@
         "./src/backend/src/file_handler/file_handler.cc",
         "./src/backend/src/utils/utils.h",
         "./src/backend/src/utils/utils.cc",
-        ".src/proto_gen/cpp/src/proto/file_handler.pb.h"
+        "./src/backend/src/proto_gen/src/proto/file_handler.pb.h",
+        "./src/backend/src/proto_gen/src/proto/file_handler.pb.cc",
+        "./src/backend/src/proto_gen/src/proto/utils.pb.h",
+        "./src/backend/src/proto_gen/src/proto/utils.pb.cc",
       ],
       "include_dirs": [
         "./node_modules/node-addon-api/",
         "./src/backend/",
-        "./src/proto_gen/",
-        "<(absl_includedir)"
+        "<(absl_includedir)",
+        "src/backend/src/proto_gen"
       ],
       "defines": [
         "NODE_ADDON_API_CPP_EXCEPTIONS",
@@ -58,7 +61,8 @@
             "<(absl_libdir)/libabsl_log_internal_globals.a",
             "-Wl,--end-group",
             "-pthread",
-            "-luuid"
+            "-luuid",
+            "-lprotobuf"
           ],
           "ldflags": ["-Wl,--no-as-needed"]
         }], 

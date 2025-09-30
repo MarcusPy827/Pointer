@@ -8,6 +8,7 @@ build
 
 # Backend build
 src/backend/build
+bin/*
 
 # Protobuf gen
 src/proto_gen/cpp/*

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package pointer.utils;
+
+message PathHandlerPathResult {
+  bool result = 1;
+  string err_msg = 2;
+  string path = 3;
+}
+
+message GenericQueryResult {
+  bool query_result = 1;
+  string err_msg = 2;
+  string result_string = 3;
+}

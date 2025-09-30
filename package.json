@@ -20,7 +20,7 @@
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:linux": "electron-vite build && electron-builder --linux",
     "backend:configure": "npx node-gyp configure",
-    "backend:build": "npx node-gyp build",
+    "backend:build": "electron-rebuild -f -w pointer_core",
     "backend:clean": "npx node-gyp clean"
   },
   "dependencies": {

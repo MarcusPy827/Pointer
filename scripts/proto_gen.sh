@@ -66,14 +66,29 @@ log_tag "info" "Generator" "Now trying to generate protobuf files for file handl
 if protoc --cpp_out=src/backend/src/proto_gen ./src/proto/file_handler.proto; then
   log_tag "ok" "Generator" "Successfully generated include headers for \"file handler.proto\""
 else
-  log_tag "error" "Generator" "Failed to generate source for \"file_handler.proto\", aborting..."
+  log_tag "error" "Generator" "Failed to generate C++ source for \"file_handler.proto\", aborting..."
   exit -1
 fi
 
 if npx protoc --ts_out="src/proto_gen/ts/" ./src/proto/file_handler.proto; then
-  log_tag "ok" "Generator" "Successfully generated include file for \"file handler.proto\""
+  log_tag "ok" "Generator" "Successfully generated TypeScript definition for \"file_handler.proto\""
 else
-  log_tag "error" "Generator" "Failed to generate source for \"file_handler.proto\", aborting..."
+  log_tag "error" "Generator" "Failed to generate TypeScript source for \"file_handler.proto\", aborting..."
+  exit -1
+fi
+
+log_tag "info" "Generator" "Now trying to generate protobuf files for utils..."
+if protoc --cpp_out=src/backend/src/proto_gen ./src/proto/utils.proto; then
+  log_tag "ok" "Generator" "Successfully generated include headers for \"utils.proto\""
+else
+  log_tag "error" "Generator" "Failed to generate C++ source for \"utils.proto\", aborting..."
+  exit -1
+fi
+
+if npx protoc --ts_out="src/proto_gen/ts/" ./src/proto/utils.proto; then
+  log_tag "ok" "Generator" "Successfully generated TypeScript definition for \"utils.proto\""
+else
+  log_tag "error" "Generator" "Failed to generate TypeScript source for \"utils.proto\", aborting..."
   exit -1
 fi
 

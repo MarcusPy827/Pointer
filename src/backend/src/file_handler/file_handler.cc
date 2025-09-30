@@ -26,6 +26,7 @@
 #include "absl/strings/str_format.h"
 
 #include "src/file_handler/file_handler.h"
+
 #include "3rdparty/nlohmann/json/json.h"
 
 #include "src/proto_gen/src/proto/file_handler.pb.h"
@@ -353,24 +354,24 @@ FileHandlerResult FileHandler::CreateWorkSpace(std::string path,
     }
 
     auto owner_id = utils_helper_.GetUserUuid();
-    if (!owner_id.query_result) {
+    if (!owner_id.query_result()) {
       result.set_result(false);
-      result.set_err_msg(owner_id.err_msg);
+      result.set_err_msg(owner_id.err_msg());
       return result;
     }
 
     auto owner_name = utils_helper_.GetUsername();
-    if (!owner_name.query_result) {
+    if (!owner_name.query_result()) {
       result.set_result(false);
-      result.set_err_msg(owner_name.err_msg);
+      result.set_err_msg(owner_name.err_msg());
       return result;
     }
 
     nlohmann::json json_gen;
     json_gen["name"] = name;
     json_gen["owner"] = {
-      { "uid", owner_id.result_string },
-      { "display_name", owner_name.result_string }
+      { "uid", owner_id.result_string() },
+      { "display_name", owner_name.result_string() }
     };
 
     json_gen["time"] = {
