@@ -25,10 +25,11 @@ message DirectoryQuery {
   string path = 2;
   string extension_name = 3;
   bool is_file = 4;
-  DirectoryQuery children = 5;
+  bool is_type_unknown = 5;
+  repeated DirectoryQuery children = 6 [deprecated = true];
 }
 
 message DirectoryQueryResult {
   FileHandlerResult query_state = 1;
-  DirectoryQuery payload = 2;
+  repeated DirectoryQuery payload = 2;
 }

@@ -99,7 +99,8 @@
     "xstring": "cpp",
     "xtr1common": "cpp",
     "xtree": "cpp",
-    "xutility": "cpp"
+    "xutility": "cpp",
+    "cinttypes": "cpp"
   },
   "C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
     "modernize-concat-nested-namespaces"

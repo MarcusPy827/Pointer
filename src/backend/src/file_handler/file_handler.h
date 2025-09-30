@@ -45,6 +45,8 @@ class FileHandler {
 
   WorkspaceInfoQueryPayload OpenWorkSpace(std::string path);
 
+  DirectoryQueryResult ListDirectory(std::string path);
+
  private:
   FileHandlerResult FolderExists(std::string path);
 

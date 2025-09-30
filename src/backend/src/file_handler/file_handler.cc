@@ -548,5 +548,80 @@ WorkspaceInfoQueryPayload FileHandler::OpenWorkSpace(std::string path) {
   return result;
 }
 
+DirectoryQueryResult FileHandler::ListDirectory(std::string path) {
+  DirectoryQueryResult result;
+  std::string err_msg;
+
+  if (path.empty()) {
+    result.mutable_query_state()->set_result(false);
+    result.mutable_query_state()->set_err_msg(absl::StrCat(
+      "The directory path is empty, aborting..."));
+    result.mutable_query_state()->set_err_code(-1);
+    return result;
+  }
+
+  auto directory_existance_test = FolderExists(path);
+  if (!directory_existance_test.result()) {
+    if (directory_existance_test.err_msg() == "The folder does NOT exist.") {
+      result.mutable_query_state()->set_result(false);
+      result.mutable_query_state()->set_err_code(1);
+      result.mutable_query_state()->set_err_msg(absl::StrCat(
+        "The directory does NOT exist, aborting..."));
+      return result;
+    } else {
+      result.mutable_query_state()->set_result(false);
+      result.mutable_query_state()->set_err_code(-1);
+      result.mutable_query_state()->set_err_msg(
+        directory_existance_test.err_msg());
+      return result;
+    }
+  }
+
+  try {
+    for (const auto& entry : std::filesystem::directory_iterator(path)) {
+      auto * query = result.add_payload();
+      query->set_name(entry.path().filename().string());
+      if (entry.is_directory()) {
+        query->set_is_file(false);
+        query->set_is_type_unknown(false);
+        query->set_extension_name("");
+      } else if (entry.is_regular_file()) {
+        query->set_is_file(true);
+        query->set_is_type_unknown(false);
+        query->set_extension_name(entry.path().extension().string());
+      } else {
+        query->set_is_file(true);
+        query->set_is_type_unknown(true);
+        query->set_extension_name(entry.path().extension().string());
+      }
+      query->set_name(entry.path().filename().string());
+      query->set_path(entry.path().string());
+    }
+
+    result.mutable_query_state()->set_result(true);
+    return result;
+  } catch (const std::filesystem::filesystem_error& e) {
+    result.mutable_query_state()->set_result(false);
+    result.mutable_query_state()->set_err_msg(absl::StrCat(
+      "A filesystem error occurred during directory listing. ",
+      absl::StrFormat("The backend returned: %s", e.what())));
+    result.mutable_query_state()->set_err_code(-1);
+    return result;
+  } catch (const std::exception& e) {
+    result.mutable_query_state()->set_result(false);
+    result.mutable_query_state()->set_err_msg(absl::StrCat(
+      "An exception occurred during directory listing. ",
+      absl::StrFormat("The backend returned: %s", e.what())));
+    result.mutable_query_state()->set_err_code(-1);
+    return result;
+  } catch (...) {
+    result.mutable_query_state()->set_result(false);
+    result.mutable_query_state()->set_err_msg(absl::StrCat(
+      "An unknown error occurred during directory listing, aborting..."));
+    result.mutable_query_state()->set_err_code(-1);
+    return result;
+  }
+}
+
 }  // namespace core
 }  // namespace pointer

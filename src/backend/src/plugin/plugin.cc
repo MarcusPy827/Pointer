@@ -25,6 +25,8 @@
 pointer::core::FileHandler file_handler_;
 pointer::utils::Utils utils_;
 
+// TODO: To depreciate this method, and serialize the result directly.
+// Progress: All the function returnings are now messages in Protobuf.
 inline Napi::Object FileHandlerResult2Object(Napi::Env env,
     pointer::core::FileHandlerResult result) {
   Napi::Object object_gen = Napi::Object::New(env);
@@ -189,6 +191,36 @@ Napi::Value OpenWorkspaceWrapper(const Napi::CallbackInfo& callback_info) {
   return result;
 }
 
+Napi::Value ListDirectoryWrapper(const Napi::CallbackInfo& callback_info) {
+  Napi::Env env = callback_info.Env();
+  Napi::Object err_result = Napi::Object::New(env);
+  std::string_view err_msg;
+
+  // Check if call is valid
+  if (callback_info.Length() != 1) {
+    err_msg = "Argument amount MISMATCH!! Except 1 argument, aborting...";
+    err_result = ThrowError(env, err_msg);
+    return err_result;
+  } else if (!callback_info[0].IsString()) {
+    err_msg =
+      "Argument type MISMATCH!! The first argument MUST be string, aborting...";
+    err_result = ThrowError(env, err_msg);
+    return err_result;
+  }
+
+  // Get argument
+  std::string path = callback_info[0].As<Napi::String>().Utf8Value();
+
+  // Execute function
+  pointer::core::DirectoryQueryResult original_result = file_handler_
+    .ListDirectory(path);
+
+  // Serialization
+  std::string buffer;
+  original_result.SerializeToString(&buffer);
+  return Napi::Buffer<char>::Copy(env, buffer.data(), buffer.size());
+}
+
 static Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("checkDirectoryExists", Napi::Function::New(env,
     CheckDirectoryExistsWrapper, "checkDirectoryExists"));
@@ -198,6 +230,8 @@ static Napi::Object Init(Napi::Env env, Napi::Object exports) {
     CreateWorkspaceWrapper, "createWorkspace"));
   exports.Set("openWorkspace", Napi::Function::New(env, OpenWorkspaceWrapper,
     "openWorkspace"));
+  exports.Set("listDirectory", Napi::Function::New(env, ListDirectoryWrapper,
+    "listDirectory"));
   return exports;
 }
 
