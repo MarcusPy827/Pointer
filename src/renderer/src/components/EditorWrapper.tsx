@@ -4,6 +4,7 @@ import { JSX, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import NoteRenderer from './NoteRendererWrapper'
 import MarkdownEditor from './MarkdownEditor'
+import CodeEditor from './CodeEditorWrapper'
 
 export default function EditorWrapper(): JSX.Element {
   const { t } = useTranslation()
@@ -87,6 +88,9 @@ export default function EditorWrapper(): JSX.Element {
             documentContent={documentContent}
             setDocumentContent={setDocumentContent}
           />
+        ) : null}
+        {editorKey === '2' ? (
+          <CodeEditor documentContent={documentContent} setDocumentContent={setDocumentContent} />
         ) : null}
         {editorKey === '3' ? <NoteRenderer documentContent={documentContent} /> : null}
       </div>
