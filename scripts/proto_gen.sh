@@ -49,14 +49,14 @@ else
   fi
 fi
 
-log_tag "info" "Path handler" "Now checking if the directory \"src/proto_gen/ts\" exists..."
-if [ -d "./src/proto_gen/ts" ]; then
-  log_tag "ok" "Path handler" "The directory \"src/proto_gen/ts\" exists."
+log_tag "info" "Path handler" "Now checking if the directory \"src/shared/proto_gen\" exists..."
+if [ -d "./src/shared/proto_gen" ]; then
+  log_tag "ok" "Path handler" "The directory \"src/shared/proto_gen\" exists."
 else
-  if mkdir "./src/proto_gen/ts"; then
-    log_tag "ok" "Path handler" "Successfully created path \"src/proto_gen/ts\"."
+  if mkdir "./src/shared/proto_gen"; then
+    log_tag "ok" "Path handler" "Successfully created path \"src/shared/proto_gen\"."
   else
-    log_tag "error" "Path handler" "Could not create path \"src/proto_gen/ts\", aborting..."
+    log_tag "error" "Path handler" "Could not create path \"src/shared/proto_gen\", aborting..."
     exit -1
   fi
 fi
@@ -70,7 +70,7 @@ else
   exit -1
 fi
 
-if npx protoc --ts_out="src/proto_gen/ts/" ./src/proto/file_handler.proto; then
+if npx protoc --ts_out="src/shared/proto_gen" ./src/proto/file_handler.proto; then
   log_tag "ok" "Generator" "Successfully generated TypeScript definition for \"file_handler.proto\""
 else
   log_tag "error" "Generator" "Failed to generate TypeScript source for \"file_handler.proto\", aborting..."
@@ -85,7 +85,7 @@ else
   exit -1
 fi
 
-if npx protoc --ts_out="src/proto_gen/ts/" ./src/proto/utils.proto; then
+if npx protoc --ts_out="src/shared/proto_gen" ./src/proto/utils.proto; then
   log_tag "ok" "Generator" "Successfully generated TypeScript definition for \"utils.proto\""
 else
   log_tag "error" "Generator" "Failed to generate TypeScript source for \"utils.proto\", aborting..."

@@ -11,9 +11,8 @@ src/backend/build
 bin/*
 
 # Protobuf gen
-src/proto_gen/cpp/*
-src/proto_gen/ts/*
 src/backend/src/proto_gen/src/*
+src/shared/proto_gen/src/*
 
 # Cache & log
 .eslintcache
