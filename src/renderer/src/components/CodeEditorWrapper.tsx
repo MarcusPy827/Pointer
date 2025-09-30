@@ -21,8 +21,16 @@ export default function CodeEditor({ documentContent, setDocumentContent }): JSX
         name="UNIQUE_ID_OF_DIV"
         editorProps={{ $blockScrolling: true }}
         fontSize={18}
-        height="calc(100vh - 64px - 40px - 65px)"
+        height="calc(100vh - 64px - 48px - 65px)"
         width="100%"
+        setOptions={{
+          enableBasicAutocompletion: true,
+          enableLiveAutocompletion: true,
+          enableSnippets: true,
+          enableMobileMenu: true,
+          showLineNumbers: true,
+          tabSize: 2
+        }}
       />
     </>
   )
