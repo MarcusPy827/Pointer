@@ -5,8 +5,9 @@ import type { WorkspaceInfoQueryPayload } from '../../shared/BackendPromise'
 import TitleBar from './components/TitleBar'
 import ToolBar from './components/ToolBar'
 import ErrNoWorkspaceOpened from './pages/ErrNoWorkspaceOpened'
-import './assets/main.css'
 import EditorWrapper from './components/EditorWrapper'
+import SidePane from './components/SidePane'
+import './assets/main.css'
 
 export default function App(): JSX.Element {
   const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -62,7 +63,12 @@ export default function App(): JSX.Element {
           <ToolBar />
           <div className="main-panel-container">
             <div className="side-panel" style={{ display: isWorkspaceOpened ? 'inherit' : 'none' }}>
-              <div className="side-panel-content">[Work in progress...]</div>
+              <div className="side-panel-content">
+                <SidePane
+                  workspacePath={workspacePath}
+                  onFileSelect={() => console.log('File selected')}
+                />
+              </div>
             </div>
 
             <div className={isWorkspaceOpened ? 'content-panel' : 'content-panel-no-sidebar'}>
