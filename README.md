@@ -86,10 +86,13 @@ We are committed to privacy protection. All data in this app is stored locally, 
 * ![CMake](https://img.shields.io/badge/CMake-%23064F8C?style=for-the-badge&logo=cmake&logoColor=white)
 
 * Library used
+  * **MDUI (v1.0.2)**: Licensed under MIT, introduced via NPM.
   * **Abseli**: Licensed under Apache-2.0, statically inked.
   * **Google Test**: Licensed under BSD-3-Clause, statically linked.
   * **nlohmann/json**: Licensed under MIT, header included in this repository.
   * **mariusbancila/stduuid**: Licensed under MIT, header included in this repository.
+  * **Protocol Buffers**: Licensed under BSD 3-Clause, introduced via package manager.
+    (In the future, it will be statically linked)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
