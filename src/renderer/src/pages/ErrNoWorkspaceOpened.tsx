@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { useWorkspaceContext } from '../context/WorkspaceBridge'
 import { FolderPath } from '../../../shared/FolderPath'
 import { WorkspaceInfoQueryPayload } from '../../../shared/BackendPromise'
+import { DirectoryQueryResult } from '../../../shared/proto_gen/src/proto/file_handler'
 
 export default function ErrNoWorkspaceOpened(): JSX.Element {
   const { t } = useTranslation()
@@ -56,6 +57,22 @@ export default function ErrNoWorkspaceOpened(): JSX.Element {
       setIsWorkspaceOpened(true)
       setWorkspacePath(folderPath)
       setWorkspaceState(queryResult)
+
+      const directoryStructure: DirectoryQueryResult =
+        // @ts-ignore API field already defined in preload
+        await window.api.listDirectoryFunc(folderPath)
+      if (!directoryStructure.queryState?.result) {
+        setIsWorkspaceOpened(false)
+        setWorkspacePath('')
+        messageApi.open({
+          type: 'error',
+          content: t('err_cannot_read_workspace')
+        })
+        console.error(
+          `Failed to read workspace, the backend returned: ${directoryStructure.queryState?.errMsg}`
+        )
+        return
+      }
 
       let workspaceInfoLog: string = 'Workspace opened.\n'
       workspaceInfoLog += `${JSON.stringify(queryResult)}`

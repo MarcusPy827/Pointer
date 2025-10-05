@@ -1,7 +1,7 @@
 import { Crepe } from '@milkdown/crepe'
 import { Milkdown, useEditor } from '@milkdown/react'
 import { MilkdownProvider } from '@milkdown/react'
-import { listener, listenerCtx } from '@milkdown/plugin-listener'
+import { listenerCtx } from '@milkdown/plugin-listener'
 import { JSX } from 'react'
 
 import '@milkdown/crepe/theme/common/style.css'
@@ -20,7 +20,7 @@ export function MarkdownEditorWrapper({ documentContent, setDocumentContent }): 
 
     crepe.editor.config((ctx) => {
       const listener = ctx.get(listenerCtx)
-      listener.markdownUpdated((_, markdown, prevMarkdown) => {
+      listener.markdownUpdated((_, markdown) => {
         console.log('Markdown updated:', markdown)
         setDocumentContent(markdown)
       })

@@ -17,6 +17,7 @@
   "err_empty_workspace_path": "工作区路径为空，请指定一个",
   "err_log_in_console": "发生错误，请打开控制台查看",
   "err_invalid_path": "路径异常，请重试",
+  "err_cannot_read_workspace": "无法读取工作区文件夹，请查阅控制台日志以获取详细信息", 
   "ok_workspace_created": "已成功创建工作区",
   "ok_workspace_opened": "工作区已打开",
   "untitled_document": "未命名文档",

@@ -8,6 +8,7 @@ import { DirectoryExistResult, WorkspaceInfoQueryPayload } from '../shared/Backe
 import icon from '../../resources/icon.png?asset'
 import IpcMainInvokeEvent = Electron.IpcMainInvokeEvent
 import backend from '../../build/Release/pointer_core.node'
+import { DirectoryQueryResult } from '../shared/proto_gen/src/proto/file_handler'
 
 let mainWindow: BrowserWindow
 
@@ -182,5 +183,15 @@ ipcMain.handle(
       min_compatible_version: result.min_compatible_version
     }
     return mapped_result
+  }
+)
+
+// IPC: List directory
+ipcMain.handle(
+  'listDirectoryAPI',
+  async (_event: IpcMainInvokeEvent, path: string): Promise<DirectoryQueryResult> => {
+    const result_raw = backend.listDirectory(path)
+    const result = DirectoryQueryResult.decode(result_raw)
+    return result
   }
 )

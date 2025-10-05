@@ -17,6 +17,7 @@
   "err_empty_workspace_path": "The workspace path is empty, please specify one.",
   "err_log_in_console": "An error has occurred, please check the console for log output...",
   "err_invalid_path": "Bad luck, we've got invalid path, please try again.",
+  "err_cannot_read_workspace": "Unable to read the workspace folder, please open the console for more information.", 
   "ok_workspace_created": "Successfully created your workspace!",
   "ok_workspace_opened": "Workspace has been opened.",
   "untitled_document": "Untitled Document",

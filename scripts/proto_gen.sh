@@ -70,7 +70,7 @@ else
   exit -1
 fi
 
-if npx protoc --ts_out="src/shared/proto_gen" ./src/proto/file_handler.proto; then
+if npx protoc --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out="src/shared/proto_gen" --ts_proto_opt=esModuleInterop=true,outputServices=none ./src/proto/file_handler.proto; then
   log_tag "ok" "Generator" "Successfully generated TypeScript definition for \"file_handler.proto\""
 else
   log_tag "error" "Generator" "Failed to generate TypeScript source for \"file_handler.proto\", aborting..."
@@ -85,7 +85,7 @@ else
   exit -1
 fi
 
-if npx protoc --ts_out="src/shared/proto_gen" ./src/proto/utils.proto; then
+if npx protoc --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out="src/shared/proto_gen" --ts_proto_opt=esModuleInterop=true,outputServices=none ./src/proto/utils.proto; then
   log_tag "ok" "Generator" "Successfully generated TypeScript definition for \"utils.proto\""
 else
   log_tag "error" "Generator" "Failed to generate TypeScript source for \"utils.proto\", aborting..."

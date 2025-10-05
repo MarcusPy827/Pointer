@@ -3,6 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 import { WindowCommandType } from '../shared/WindowCommandType'
 import { FolderPath } from '../shared/FolderPath'
 import { DirectoryExistResult, WorkspaceInfoQueryPayload } from '../shared/BackendPromise'
+import type { DirectoryQueryResult } from '../shared/proto_gen/src/proto/file_handler'
 
 // Custom APIs for renderer
 const api = {
@@ -22,7 +23,11 @@ const api = {
 
   // API: Open workspace
   openWorkspaceFunc: (path: string): Promise<DirectoryExistResult> =>
-    ipcRenderer.invoke('openWorkspaceAPI', path)
+    ipcRenderer.invoke('openWorkspaceAPI', path),
+
+  // API: List directory
+  listDirectoryFunc: (path: string): Promise<DirectoryQueryResult> =>
+    ipcRenderer.invoke('listDirectoryAPI', path)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

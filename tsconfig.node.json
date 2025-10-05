@@ -3,7 +3,9 @@
   "include": ["electron.vite.config.*",
     "src/main/**/*",
     "src/preload/**/*",
-    "src/shared/*.ts"
+    "src/shared/*.ts",
+    "src/shared/proto_gen/src/**/*.ts",
+    "src/shared/proto_gen/src/**/*.d.ts"
   ],
   "compilerOptions": {
     "composite": true,
