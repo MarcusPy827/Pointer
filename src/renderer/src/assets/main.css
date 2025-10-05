@@ -239,3 +239,8 @@ html, body {
   width: 22px !important;
   height: 22px !important;
 }
+
+.ant-tree-node-selected {
+  color: #5e81ac !important;
+  background: transparent !important;
+}
