@@ -27,7 +27,9 @@
         "./node_modules/node-addon-api/",
         "./src/backend/",
         "<(absl_includedir)",
-        "src/backend/src/proto_gen"
+        "src/backend/src/proto_gen",
+        "/usr/include",
+        "/usr/include/google"
       ],
       "defines": [
         "NODE_ADDON_API_CPP_EXCEPTIONS",
@@ -62,7 +64,8 @@
             "-Wl,--end-group",
             "-pthread",
             "-luuid",
-            "-lprotobuf"
+            "-lprotobuf",
+            "/usr/lib/x86_64-linux-gnu/libprotobuf.a"
           ],
           "ldflags": ["-Wl,--no-as-needed"]
         }], 
